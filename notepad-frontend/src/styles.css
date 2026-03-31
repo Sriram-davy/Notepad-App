@@ -1,0 +1,48 @@
+/* Global styles */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background-color: #f2f1e8; /* General light mode beige fallback */
+  color: #31332c;
+  transition: background-color 0.3s;
+}
+
+body.dark-theme, .dark-mode {
+  background-color: #121212;
+  color: #eaeaea;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Transitions */
+* {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Monospace font for notepad */
+.notepad-textarea {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notepad-textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}

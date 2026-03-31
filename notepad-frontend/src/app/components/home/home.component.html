@@ -1,0 +1,96 @@
+<div class="home-container">
+  <!-- Noise overlay for texture -->
+  <div class="noise-overlay"></div>
+
+  <!-- Header (White background) -->
+  <header class="top-nav-bar pristine-white">
+    <div class="nav-left">
+      <span class="logo md-scale" routerLink="/">NoteSnap</span>
+    </div>
+
+    <div class="nav-right">
+      <button class="nav-link">Privacy</button>
+      <button class="nav-link">Support</button>
+
+      <button class="theme-toggle" (click)="toggleTheme()">
+        <span class="material-symbols-outlined">dark_mode</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Split Layout (Beige background) -->
+  <main class="home-main beige-bg">
+    <!-- Faux image strip on left -->
+    <div class="hero-image-strip">
+      <div class="light-ray light-ray-1"></div>
+      <div class="light-ray light-ray-2"></div>
+    </div>
+
+    <!-- Left Column -->
+    <div class="hero-left">
+      <p class="hero-kicker font-mono uppercase tracking-widest text-outline-variant">Your Personal Journal</p>
+      <h1 class="hero-title font-headline">
+        A Private<br>
+        Space for<br>
+        <span class="italic-text">Every</span><br>
+        <span class="italic-text">Thought.</span>
+      </h1>
+      <p class="hero-subtitle font-body text-outline">A simple, private space for your thoughts. No accounts, just a
+        link. Your notes are saved for 10 days.</p>
+      <div class="hero-divider font-mono text-outline-variant">
+        <span class="divider-line"></span>
+        PRIVATE ACCESS - 10 DAY STORAGE
+      </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="hero-right">
+      <div class="action-card pristine-white">
+        <h2 class="card-title font-mono uppercase tracking-widest text-outline-variant">Name your private notepad</h2>
+        <input class="notepad-input font-mono" type="text" [(ngModel)]="username" placeholder="e.g., my-daily-journal"
+          (keyup.enter)="openNotepad()" maxlength="50" autofocus />
+        <button class="start-btn uppercase tracking-widest font-body" (click)="openNotepad()"
+          [disabled]="!username.trim()">Start Writing</button>
+
+        <div class="card-footer font-body text-outline">
+          <p><span class="material-symbols-outlined icon-small">lock</span> Your notes are saved for 10 days</p>
+          <p><span class="material-symbols-outlined icon-small">link</span> Access anytime with your unique URL</p>
+        </div>
+      </div>
+      <!-- Decorative element under card -->
+      <div class="decorative-bottom-right"></div>
+    </div>
+  </main>
+
+  <div class="sub-footer-fader beige-bg">
+    <div class="fading-text-container font-headline italic text-outline-variant">
+      <span>Notepad expire in 10 days.</span>
+    </div>
+  </div>
+
+  <!-- Footer (White background) -->
+  <footer class="bottom-footer pristine-white">
+    <div class="footer-content">
+
+      <div class="footer-left">
+        <span class="footer-brand font-headline">NoteSnap</span>
+        <p class="footer-tagline font-body text-outline">
+          Private writing. No accounts. Just a link.
+        </p>
+      </div>
+
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+          <a href="#">Support</a>
+        </div>
+
+        <p class="footer-meta font-mono text-outline-variant">
+          Notes expire in 10 days
+        </p>
+      </div>
+
+    </div>
+  </footer>
+</div>
