@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiBaseUrl: 'https://your-backend-url.railway.app'
+  apiBaseUrl: 'https://notepad-app-production-9dfd.up.railway.app'
 };
