@@ -42,7 +42,7 @@ public class NotepadScheduler {
         }
     }
 
-    @Scheduled(cron = "0 0 */6 * * *") // Every 6 hours
+    @Scheduled(cron = "0 */10 * * * *") // Every 10 mins
     public void backupNotepads() {
         LocalDateTime now = LocalDateTime.now();
         String timestamp = now.format(DateTimeFormatter.ofPattern("yyyy-MM-dd_HH-mm-ss"));

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -188,5 +189,10 @@ public class NotepadService {
 
     private String normalizeUsername(String username) {
         return username.trim().toLowerCase();
+    }
+
+    public List<Notepad> getAllNotepads(){
+        List<Notepad> allNotepads = repository.findAll();
+        return allNotepads;
     }
 }

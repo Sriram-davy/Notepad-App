@@ -1,10 +1,13 @@
 package com.notesnap.controller;
 
 import com.notesnap.dto.*;
+import com.notesnap.model.Notepad;
 import com.notesnap.service.NotepadService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/notepad")
@@ -58,5 +61,11 @@ public class NotepadController {
     public ResponseEntity<HealthResponse> health() {
         HealthResponse response = service.getHealth();
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/debug")
+    public ResponseEntity<List<Notepad>> getAllNotepads() {
+        List<Notepad> notepads = service.getAllNotepads();
+        return ResponseEntity.ok(notepads);
     }
 }
