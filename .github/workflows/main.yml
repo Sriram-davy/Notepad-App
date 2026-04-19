@@ -1,0 +1,16 @@
+name: Keep Render App Warm
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"  # every 5 minutes
+  workflow_dispatch:       # allows manual trigger
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Curl health endpoint
+        run: |
+          echo "Pinging app..."
+          curl -s -o /dev/null -w "%{http_code}" https://notepad-backend-app.onrender.com/api/notepad/health
