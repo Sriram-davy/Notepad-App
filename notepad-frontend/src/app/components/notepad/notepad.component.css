@@ -1,3 +1,101 @@
+/* --- DARK MODE OVERRIDES (FIXED) --- */
+.dark-mode .notepad-container,
+.dark-mode .main-content,
+.dark-mode .editor-canvas,
+.dark-mode .textarea-container {
+  background-color: #000 !important;
+  color: #fff !important;
+}
+
+/* Header: sticky in both modes, black bg, white border/text in dark */
+.top-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  background: var(--surface);
+  border-bottom: 1.5px solid var(--outline-variant);
+  transition: background 0.3s, color 0.3s;
+}
+.dark-mode .top-nav-bar {
+  background: #000 !important;
+  color: #fff !important;
+  border-bottom: 2.5px solid #fff !important;
+}
+.dark-mode .top-nav-bar * {
+  color: #fff !important;
+  fill: #fff !important;
+}
+.dark-mode .logo,
+.dark-mode .notepad-path,
+.dark-mode .char-count,
+.dark-mode .status-text {
+  color: #fff !important;
+}
+.dark-mode .icon-btn {
+  color: #fff !important;
+  border: 1.5px solid #fff !important;
+  background: #000 !important;
+}
+.dark-mode .icon-btn .material-symbols-outlined {
+  color: #fff !important;
+}
+.dark-mode .save-btn {
+  background: #000 !important;
+  color: #fff !important;
+  border: 1.5px solid #fff !important;
+}
+.dark-mode .save-btn:disabled {
+  background: #222 !important;
+  color: #888 !important;
+  border: 1.5px solid #fff !important;
+}
+
+/* Editor: remove double border, only one white border in dark */
+.editor-canvas {
+  border: 2px solid black;
+  background: var(--surface);
+  transition: background 0.3s, border-color 0.3s;
+}
+.dark-mode .editor-canvas {
+  border: 2.5px solid #fff !important;
+  background: #000 !important;
+}
+.dark-mode .textarea-container {
+  background: #000 !important;
+}
+.notepad-textarea {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--on-surface);
+}
+.dark-mode .notepad-textarea {
+  color: #fff !important;
+  background: #000 !important;
+}
+
+/* Footer: sticky in both modes, black bg, white border/text in dark */
+.bottom-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 50;
+  background: var(--surface);
+  border-top: 1.5px solid var(--outline-variant);
+  transition: background 0.3s, color 0.3s;
+}
+.dark-mode .bottom-footer {
+  background: #000 !important;
+  color: #fff !important;
+  border-top: 2.5px solid #fff !important;
+}
+.dark-mode .footer-content * {
+  color: #fff !important;
+  border-color: #fff !important;
+}
 /* Variables Setup */
 :root {
   --on-tertiary: #fff8eb;
@@ -298,8 +396,9 @@
   width: 100%;
   gap: 2rem;
   background-color: var(--surface);
-  border: 1px solid var(--outline-variant);
-  border-radius: 8px;
+  /* border: 1px solid var(--outline-variant);
+  border-radius: 8px; */
+  border: 2px solid black;
   padding: 3rem 4rem;
   box-shadow: 0 10px 40px rgba(0, 0, 0, 0.03);
   transition: background-color 0.3s, border-color 0.3s;
@@ -331,6 +430,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+
 }
 
 .notepad-textarea {
@@ -346,6 +446,7 @@
   color: var(--on-surface);
   resize: none;
   overflow-y: auto;
+
 }
 
 .dark-mode .notepad-textarea {
@@ -453,7 +554,8 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(240, 238, 233, 0.85); /* Bright elegant wash */
+  background: rgba(240, 238, 233, 0.85);
+  /* Bright elegant wash */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -575,7 +677,7 @@
 .elegant-btn:hover {
   background: #2a2a2a;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .dark-mode .elegant-btn {

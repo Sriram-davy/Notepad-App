@@ -8,6 +8,10 @@
   </div>
 
   <ng-container *ngIf="!isLoading">
+    <!-- Idle warning message -->
+    <div *ngIf="idleWarning" class="idle-warning" style="position:fixed;top:70px;left:0;width:100vw;z-index:10000;text-align:center;background:#fffae6;color:#a00;padding:0.75rem 0;font-weight:600;box-shadow:0 2px 8px rgba(0,0,0,0.08);">
+      You will be logged out due to inactivity in 30 seconds.
+    </div>
     <!-- TopNavBar -->
     <header class="top-nav-bar pristine-bg">
       <div class="nav-left">
@@ -45,9 +49,9 @@
       <!-- Editor Canvas -->
       <div class="editor-canvas">
         <!-- Line Numbers -->
-        <div class="line-numbers-col hidden-mobile">
+        <!-- <div class="line-numbers-col hidden-mobile">
           <span *ngFor="let line of lineNumbers; let i = index">{{ i + 1 | number:'2.0' }}</span>
-        </div>
+        </div> -->
 
         <!-- Editor Text Area -->
         <div class="textarea-container">

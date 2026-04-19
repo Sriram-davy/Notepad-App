@@ -1,3 +1,9 @@
+// ── IDLE TIMER (added 2026-04-20) ──────────────────────────────
+import { HostListener } from '@angular/core';
+import { Subject } from 'rxjs';
+
+const IDLE_TIMEOUT_MS = 300000; // 5 minutes
+
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -15,6 +21,12 @@ import { interval, Subscription, Observable, of } from 'rxjs';
   styleUrl: './notepad.component.css'
 })
 export class NotepadComponent implements OnInit, OnDestroy {
+  // Idle timer state
+  private idleTimer: any = null;
+  idleWarning = false;
+  private readonly idleWarningMs = IDLE_TIMEOUT_MS - 30000; // 30s before timeout
+  private idleWarningTimer: any = null;
+  private destroy$ = new Subject<void>();
   notepad: NotepadResponse | null = null;
   content = '';
   passwordInput = '';
@@ -48,24 +60,72 @@ export class NotepadComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    // Sync dark mode from body
+    this.isDarkMode = document.body.classList.contains('dark-mode');
     const username = this.route.snapshot.paramMap.get('username');
     if (username) {
       this.loadNotepad(username);
     }
-
     // Auto save every 30 seconds
     this.autoSaveSubscription = interval(30000).pipe(
       switchMap(() => this.saveNotepad())
     ).subscribe();
+    this.startIdleTimer();
   }
 
   ngOnDestroy() {
     if (this.autoSaveSubscription) {
       this.autoSaveSubscription.unsubscribe();
     }
+    // Cancel idle timer
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer);
+    }
+    if (this.idleWarningTimer) {
+      clearTimeout(this.idleWarningTimer);
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.notepad && this.notepad.username) {
       this.notepadService.removeToken(this.notepad.username);
     }
+  }
+
+  // ── IDLE TIMER LOGIC ──────────────────────────────
+  private startIdleTimer() {
+    this.clearIdleTimers();
+    this.idleWarning = false;
+    this.idleWarningTimer = setTimeout(() => {
+      this.idleWarning = true;
+    }, this.idleWarningMs);
+    this.idleTimer = setTimeout(() => {
+      this.handleIdleTimeout();
+    }, IDLE_TIMEOUT_MS);
+  }
+
+  private clearIdleTimers() {
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer);
+      this.idleTimer = null;
+    }
+    if (this.idleWarningTimer) {
+      clearTimeout(this.idleWarningTimer);
+      this.idleWarningTimer = null;
+    }
+  }
+
+  private handleIdleTimeout() {
+    this.idleWarning = false;
+    this.router.navigate(['/']);
+  }
+
+  @HostListener('document:mousemove')
+  @HostListener('document:keydown')
+  @HostListener('document:mousedown')
+  @HostListener('document:touchstart')
+  @HostListener('document:scroll')
+  onUserActivity() {
+    this.startIdleTimer();
   }
 
   loadNotepad(username: string) {
@@ -159,6 +219,11 @@ export class NotepadComponent implements OnInit, OnDestroy {
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
   }
 
   updateLineNumbers() {
