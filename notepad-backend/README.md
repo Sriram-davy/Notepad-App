@@ -7,8 +7,8 @@ Spring Boot backend for the NoteSnap personal notepad application.
 - REST API for notepad management
 - Password protection with BCrypt hashing
 - Automatic expiry after 10 days
-- Scheduled cleanup and backup tasks
-- H2 in-memory database
+- Scheduled cleanup of expired notepads
+- PostgreSQL database
 - CORS configuration for Angular frontend
 
 ## API Endpoints
@@ -24,8 +24,13 @@ Spring Boot backend for the NoteSnap personal notepad application.
 
 1. Ensure Java 17 is installed
 2. Ensure Maven is installed
-3. Run `mvn clean install`
-4. Run `mvn spring-boot:run`
+3. Create a PostgreSQL database named `notesnap`
+4. Set environment variables:
+	- `DATABASE_URL` (default: jdbc:postgresql://localhost:5432/notesnap)
+	- `DB_USERNAME` (default: postgres)
+	- `DB_PASSWORD` (default: postgres)
+5. Run `mvn clean install`
+6. Run `mvn spring-boot:run`
 
 The application will start on http://localhost:8080
 
@@ -37,6 +42,7 @@ Edit `src/main/resources/application.properties` for custom settings:
 
 ## Production Deployment
 
+- Set `DATABASE_URL`, `DB_USERNAME`, `DB_PASSWORD` as environment variables
+- Set `spring.jpa.hibernate.ddl-auto=validate` once schema is stable
 - Update CORS origins in `CorsConfig.java`
-- Use a persistent database instead of H2
-- Configure backup directory permissions
+- Tables are auto-created on first run via `ddl-auto=update`

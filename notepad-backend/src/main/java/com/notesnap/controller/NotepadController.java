@@ -63,7 +63,7 @@ public class NotepadController {
         return ResponseEntity.ok(response);
     }
 
-    @GetMapping("/debug")
+    @GetMapping("/debug/all")
     public ResponseEntity<List<Notepad>> getAllNotepads() {
         List<Notepad> notepads = service.getAllNotepads();
         return ResponseEntity.ok(notepads);

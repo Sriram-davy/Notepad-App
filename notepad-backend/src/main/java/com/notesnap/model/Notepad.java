@@ -19,13 +19,14 @@ import java.time.LocalDateTime;
 public class Notepad {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @SequenceGenerator(name = "notepad_seq", sequenceName = "notepad_sequence", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notepad_seq")
     private Long id;
 
     @Column(nullable = false, unique = true, length = 100)
     private String username;
 
-    @Column(columnDefinition = "CLOB")
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     @Column(length = 255)
@@ -38,17 +39,17 @@ public class Notepad {
     private Boolean isProtected = false;
 
     @CreationTimestamp
-    @Column(nullable = false, updatable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
-    @Column(nullable = false)
+    @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 
-    private LocalDateTime lastBackedUpAt;
+    // Removed lastBackedUpAt (backup logic is being removed)
 
     // Custom setter for content to enforce character limit
     public void setContent(String content) {
