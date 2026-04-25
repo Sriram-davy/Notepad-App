@@ -24,9 +24,9 @@ Spring Boot backend for the SlashPad personal notepad application.
 
 1. Ensure Java 17 is installed
 2. Ensure Maven is installed
-3. Create a PostgreSQL database named `notesnap`
+3. Create a PostgreSQL database named `slashpad`
 4. Set environment variables:
-	- `DATABASE_URL` (default: jdbc:postgresql://localhost:5432/notesnap)
+	- `DATABASE_URL` (default: jdbc:postgresql://localhost:5432/slashpad)
 	- `DB_USERNAME` (default: postgres)
 	- `DB_PASSWORD` (default: postgres)
 5. Run `mvn clean install`
