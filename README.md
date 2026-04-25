@@ -1,6 +1,6 @@
-# NoteSnap Frontend
+# SlashPad Frontend
 
-Angular 19 frontend for the NoteSnap personal notepad application.
+Angular 19 frontend for the SlashPad personal notepad application.
 
 ## Features
 
@@ -46,9 +46,9 @@ Deploy to Netlify:
 - `PasswordPromptComponent` - Password entry overlay
 - `NotFoundComponent` - 404 page
 
-# NoteSnap Backend
+# SlashPad Backend
 
-Spring Boot backend for the NoteSnap personal notepad application.
+Spring Boot backend for the SlashPad personal notepad application.
 
 ## Features
 

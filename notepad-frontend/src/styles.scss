@@ -1,0 +1,64 @@
+/* Global styles */
+:root {
+  --obsidian: #1c1c1c;
+  --obsidian-deep: #141414;
+  --obsidian-surface: #242424;
+  --obsidian-border: #2e2e2e;
+  --gold: #c9a84c;
+  --gold-dim: #a8863a;
+  --gold-muted: rgba(201,168,76,0.15);
+  --parchment: #f5f0e8;
+  --parchment-dim: #d4c9b0;
+  --ink: #e8e4dc;
+  --ink-muted: #8a8478;
+  --ink-faint: #4a4842;
+  --surface: var(--obsidian);
+  --on-surface: var(--ink);
+  --outline: var(--ink-muted);
+  --outline-variant: var(--ink-faint);
+  --primary: var(--gold);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  background: var(--obsidian-deep);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+}
+
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Transitions */
+* {
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+}
+
+/* Monospace font for notepad */
+.notepad-textarea {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  line-height: 1.6;
+  resize: none;
+  border: none;
+  outline: none;
+  background: transparent;
+  color: var(--ink);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .notepad-textarea {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}

@@ -1,6 +1,6 @@
-# NoteSnap Backend
+# SlashPad Backend
 
-Spring Boot backend for the NoteSnap personal notepad application.
+Spring Boot backend for the SlashPad personal notepad application.
 
 ## Features
 

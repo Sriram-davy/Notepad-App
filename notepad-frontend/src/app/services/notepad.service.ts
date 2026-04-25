@@ -56,10 +56,9 @@ export class NotepadService {
       .pipe(catchError(err => this.handleError(err, false)));
   }
 
-  removePassword(username: string, request: PasswordRequest): Observable<GenericResponse> {
-    return this.http.request<GenericResponse>('delete', `${this.apiUrl}/${username}/password`, {
-      body: request
-    }).pipe(catchError(err => this.handleError(err, false)));
+  removePassword(username: string): Observable<GenericResponse> {
+    return this.http.delete<GenericResponse>(`${this.apiUrl}/${username}/password`)
+      .pipe(catchError(err => this.handleError(err, false)));
   }
 
   private handleError(error: HttpErrorResponse, isLoad: boolean = false): Observable<never> {

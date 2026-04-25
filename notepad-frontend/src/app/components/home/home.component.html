@@ -1,96 +1,114 @@
 <div class="home-container">
-  <!-- Noise overlay for texture -->
   <div class="noise-overlay"></div>
 
-  <!-- Header (White background) -->
-  <header class="top-nav-bar pristine-white">
+  <header class="top-nav-bar">
     <div class="nav-left">
-      <span class="logo md-scale" routerLink="/">NoteSnap</span>
+      <span class="logo" routerLink="/">SlashPad</span>
     </div>
-
     <div class="nav-right">
       <button class="nav-link">Privacy</button>
       <button class="nav-link">Support</button>
-
-      <button class="theme-toggle" (click)="toggleTheme()">
-        <span class="material-symbols-outlined">dark_mode</span>
-      </button>
     </div>
   </header>
 
-  <!-- Main Split Layout (Beige background) -->
-  <main class="home-main beige-bg">
-    <!-- Faux image strip on left -->
-    <div class="hero-image-strip">
-      <div class="light-ray light-ray-1"></div>
-      <div class="light-ray light-ray-2"></div>
-    </div>
-
-    <!-- Left Column -->
-    <div class="hero-left">
-      <p class="hero-kicker font-mono uppercase tracking-widest text-outline-variant">Your Personal Journal</p>
-      <h1 class="hero-title font-headline">
-        A Private<br>
-        Space for<br>
-        <span class="italic-text">Every</span><br>
-        <span class="italic-text">Thought.</span>
+  <main class="hero-section">
+    <div class="hero-content">
+      <p class="hero-kicker">YOUR PRIVATE CANVAS</p>
+      <h1 class="hero-title">
+        The <span class="gold-italic">Sanctuary</span><br>
+        of Thought.
       </h1>
-      <p class="hero-subtitle font-body text-outline">A simple, private space for your thoughts. No accounts, just a
-        link. Your notes are saved for 10 days.</p>
-      <div class="hero-divider font-mono text-outline-variant">
-        <span class="divider-line"></span>
-        PRIVATE ACCESS - 10 DAY STORAGE
-      </div>
-    </div>
+      <p class="hero-subtitle">
+        A canvas for your thoughts. No logins, no tracking.<br>
+        Your unique URL is the only key to your notepad.
+      </p>
 
-    <!-- Right Column -->
-    <div class="hero-right">
-      <div class="action-card pristine-white">
-        <h2 class="card-title font-mono uppercase tracking-widest text-outline-variant">Name your private notepad</h2>
-        <input class="notepad-input font-mono" type="text" [(ngModel)]="username" placeholder="e.g., my-daily-journal"
-          (keyup.enter)="openNotepad()" maxlength="50" autofocus />
-        <button class="start-btn uppercase tracking-widest font-body" (click)="openNotepad()"
-          [disabled]="!username.trim()">Start Writing</button>
-
-        <div class="card-footer font-body text-outline">
-          <p><span class="material-symbols-outlined icon-small">lock</span> Your notes are saved for 10 days</p>
-          <p><span class="material-symbols-outlined icon-small">link</span> Access anytime with your unique URL</p>
+      <div class="url-input-row">
+        <div class="url-input-wrapper">
+          <span class="url-prefix">slashpad.netlify.app/</span>
+          <input class="notepad-input font-mono" type="text" [(ngModel)]="username" placeholder="name-your-path..."
+            (keyup.enter)="openNotepad()" maxlength="50" autofocus />
         </div>
+        <button class="enter-btn" (click)="openNotepad()" [disabled]="!username.trim()">
+          Enter Sanctuary
+          <span class="btn-arrow">→</span>
+        </button>
       </div>
-      <!-- Decorative element under card -->
-      <div class="decorative-bottom-right"></div>
+
+      <div class="trust-badges">
+        <span class="badge">
+          <span class="material-symbols-outlined">lock</span>
+          END-TO-END PRIVATE
+        </span>
+        <span class="badge">
+          <span class="material-symbols-outlined">cloud_done</span>
+          AUTO-SAVING
+        </span>
+      </div>
     </div>
   </main>
 
-  <div class="sub-footer-fader beige-bg">
-    <div class="fading-text-container font-headline italic text-outline-variant">
-      <span>Notepad expire in 10 days.</span>
-    </div>
-  </div>
-
-  <!-- Footer (White background) -->
-  <footer class="bottom-footer pristine-white">
-    <div class="footer-content">
-
-      <div class="footer-left">
-        <span class="footer-brand font-headline">NoteSnap</span>
-        <p class="footer-tagline font-body text-outline">
-          Private writing. No accounts. Just a link.
+  <section class="features-section">
+    <div class="feature-image-col">
+      <div class="feature-image-block"></div>
+      <div class="feature-caption">
+        <p class="caption-title gold-text">Private yet Permanent.</p>
+        <p class="caption-body">
+          SlashPad treats your writing as sacred.
+          Return anytime via your unique link.
         </p>
       </div>
-
-      <div class="footer-right">
-        <div class="footer-links">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Support</a>
+    </div>
+    <div class="feature-text-col">
+      <div class="gold-rule"></div>
+      <h2 class="feature-heading">The Ledger of<br>Your Private Life.</h2>
+      <p class="feature-body">
+        No directories, no search engines. Just the direct
+        link between your mind and your private canvas.
+      </p>
+      <div class="feature-items">
+        <div class="feature-item">
+          <span class="material-symbols-outlined gold-text">encrypted</span>
+          <div>
+            <p class="item-title">Private by Design</p>
+            <p class="item-body">Your data is yours. Access it only with your link.</p>
+          </div>
         </div>
-
-        <p class="footer-meta font-mono text-outline-variant">
-          Notes expire in 10 days
-        </p>
+        <div class="feature-item">
+          <span class="material-symbols-outlined gold-text">edit_note</span>
+          <div>
+            <p class="item-title">Up to 50,000 Characters</p>
+            <p class="item-body">Generous space for long-form writing and journaling.</p>
+          </div>
+        </div>
       </div>
-
     </div>
+  </section>
+
+  <section class="cards-section">
+    <div class="info-card">
+      <span class="material-symbols-outlined gold-text">edit</span>
+      <h3 class="card-heading">Writing</h3>
+      <p class="card-body">Raw, unfiltered, and private. Start writing instantly.</p>
+    </div>
+    <div class="info-card">
+      <span class="material-symbols-outlined gold-text">link</span>
+      <h3 class="card-heading">Your Link</h3>
+      <p class="card-body">Your custom path is the only key. Keep it safe.</p>
+    </div>
+    <div class="info-card">
+      <span class="material-symbols-outlined gold-text">lock</span>
+      <h3 class="card-heading">Protected</h3>
+      <p class="card-body">Add a password. Only you can unlock your notepad.</p>
+    </div>
+  </section>
+
+  <footer class="bottom-footer">
+    <div class="footer-links">
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+      <a href="#">Support</a>
+    </div>
+    <p class="footer-meta">© 2026 SLASHPAD · CRAFTED FOR PRIVACY · BY SRIRAM DAVY</p>
   </footer>
 </div>

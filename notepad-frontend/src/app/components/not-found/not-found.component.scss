@@ -1,0 +1,39 @@
+.not-found-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  text-align: center;
+  padding: 20px;
+  background: var(--obsidian-deep);
+  color: var(--ink);
+}
+h1 {
+  font-size: 6rem;
+  margin: 0;
+  font-family: 'Newsreader', serif;
+  font-weight: 400;
+  color: var(--gold);
+}
+p {
+  font-size: 1.2rem;
+  margin: 20px 0;
+  color: var(--ink-muted);
+}
+button {
+  padding: 12px 24px;
+  background: var(--gold);
+  color: var(--obsidian-deep);
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  font-weight: 600;
+  font-family: 'Inter', sans-serif;
+  letter-spacing: 0.05em;
+  transition: background 0.2s;
+}
+button:hover {
+  background: var(--gold-dim);
+}
