@@ -7,7 +7,7 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   username = '';
@@ -21,6 +21,6 @@ export class HomeComponent {
   }
 
   toggleTheme() {
-    document.body.classList.toggle('dark');
+    document.body.classList.toggle('dark-mode');
   }
 }

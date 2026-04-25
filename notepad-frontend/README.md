@@ -1,17 +1,17 @@
-# NoteSnap Frontend
+# SlashPad Frontend
 
-Angular 19 frontend for the NoteSnap personal notepad application.
+Angular 19 frontend for the SlashPad personal notepad application.
 
 ## Features
 
-- Clean, minimalist UI with glassmorphism design
-- Path-based routing (/username)
-- Auto-save every 30 seconds
-- Password protection overlay
-- Character count and limit warnings
-- Dark/light mode toggle
-- Mobile responsive
-- Monospace font for notepad
+- **Premium UI**: Obsidian and Gold elegant aesthetic design pattern
+- **The Sanctuary of Thought**: Path-based private routing (`/username`)
+- **Zero-Knowledge Architecture**: End-to-End private notepad structure
+- **Auto-save**: Ephemeral yet permanent, saving every 30 seconds
+- **Password Protection**: Optional padlock logic for extra security
+- **Dynamic Ledger**: Character count statistics, character limits, and line numbering
+- **Web App Architecture**: Fully responsive for cross-device mobile/desktop usage
+- **Typography Engine**: Features premium fonts including Newsreader, Inter, and JetBrains Mono
 
 ## Setup
 
@@ -20,6 +20,11 @@ Angular 19 frontend for the NoteSnap personal notepad application.
 3. Run `npm start` for development
 
 The application will start on http://localhost:4200
+
+## Technical Architecture
+
+- Fully migrated to globally compile using SCSS (`styles.scss`)
+- Using Angular 19 Standalone Components
 
 ## Build
 
@@ -40,8 +45,8 @@ Deploy to Netlify:
 
 ## Components
 
-- `HomeComponent` - Landing page
-- `NotepadComponent` - Main notepad interface
-- `PasswordSetupComponent` - Password management
+- `HomeComponent` - Landing page sanctuary
+- `NotepadComponent` - Main private ledger canvas
+- `PasswordSetupComponent` - Protected key management
 - `PasswordPromptComponent` - Password entry overlay
 - `NotFoundComponent` - 404 page

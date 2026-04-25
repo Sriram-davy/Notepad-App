@@ -10,11 +10,10 @@ import { PasswordRequest } from '../../models/notepad.model';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './password-setup.component.html',
-  styleUrl: './password-setup.component.css'
+  styleUrl: './password-setup.component.scss'
 })
 export class PasswordSetupComponent implements OnInit {
   username = '';
-  currentPassword = '';
   newPassword = '';
   passwordHint = '';
   isLoading = false;
@@ -37,7 +36,6 @@ export class PasswordSetupComponent implements OnInit {
     this.success = '';
 
     const request: PasswordRequest = {
-      currentPassword: this.currentPassword || undefined,
       newPassword: this.newPassword,
       hint: this.passwordHint || undefined
     };
@@ -62,12 +60,7 @@ export class PasswordSetupComponent implements OnInit {
     this.error = '';
     this.success = '';
 
-    const request: PasswordRequest = {
-      currentPassword: this.currentPassword || undefined,
-      newPassword: '' // Not used for removal but required by interface
-    };
-
-    this.notepadService.removePassword(this.username, request).subscribe({
+    this.notepadService.removePassword(this.username).subscribe({
       next: (res) => {
         this.isLoading = false;
         this.success = 'Password successfully removed!';

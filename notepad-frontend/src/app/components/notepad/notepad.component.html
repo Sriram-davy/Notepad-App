@@ -1,101 +1,143 @@
-<div class="notepad-container beige-bg" [class.dark-mode]="isDarkMode">
+<div class="notepad-container" [class.dark-mode]="isDarkMode">
   <div class="noise-overlay"></div>
 
-  <!-- Loading State -->
+  <!-- Loading -->
   <div class="loading-overlay" *ngIf="isLoading">
-    <div class="loader"></div>
-    <p>Loading your notes...</p>
+    <div class="loader-ring"></div>
+    <p class="loader-text">Opening your notepad...</p>
   </div>
 
   <ng-container *ngIf="!isLoading">
-    <!-- TopNavBar -->
-    <header class="top-nav-bar pristine-bg">
+
+    <!-- Idle warning -->
+    <div class="idle-warning" *ngIf="idleWarning">
+      Still writing? Your notepad closes in 30 seconds — your work is already saved.
+    </div>
+
+    <!-- Header -->
+    <header class="top-nav-bar">
       <div class="nav-left">
-        <span class="logo" (click)="navigateLogo()">NoteSnap</span>
-        <span class="notepad-path font-mono text-outline-variant uppercase tracking-widest">/{{ notepad?.username }}
-          Notes</span>
+        <span class="logo" (click)="navigateLogo()">SlashPad</span>
+        <span class="notepad-path">/{{ notepad?.username }}</span>
       </div>
       <div class="nav-right">
-        <!-- Theme Toggle & Lock (Custom Additions, subtle) -->
-        <button class="icon-btn" (click)="toggleTheme()" title="Toggle Theme">
-          <span class="material-symbols-outlined">{{ isDarkMode ? 'light_mode' : 'dark_mode' }}</span>
-        </button>
-        <button class="icon-btn" (click)="togglePasswordSetup()" [class.locked]="notepad?.isProtected"
-          title="Password Protection">
-          <span class="material-symbols-outlined">{{ notepad?.isProtected ? 'lock' : 'lock_open' }}</span>
-        </button>
-
-        <div class="save-status">
-          <span class="material-symbols-outlined status-icon">cloud_done</span>
-          <span class="status-text tracking-widest uppercase text-outline-variant">Draft status: {{ isSaving ?
-            'Saving...' : 'Saved' }}</span>
+        <div class="secure-badge" [class.protected]="notepad?.isProtected"
+          (click)="togglePasswordSetup()" title="Password Protection">
+          <span class="material-symbols-outlined">
+            {{ notepad?.isProtected ? 'lock' : 'lock_open' }}
+          </span>
+          <span class="secure-label">
+            {{ notepad?.isProtected ? 'SECURED' : 'UNLOCKED' }}
+          </span>
         </div>
-
-        <!-- Character Count added at the top as requested -->
-        <span class="char-count font-mono text-outline-variant tracking-widest uppercase">{{ characterCount | number }}
-          / {{ characterLimit | number }} chars</span>
-
-        <button class="save-btn" (click)="manualSave()" [disabled]="isSaving">
-          Save
+        <span class="char-count font-mono">
+          {{ characterCount | number }} / {{ characterLimit | number }}
+        </span>
+        <div class="save-status">
+          <span class="material-symbols-outlined status-icon">
+            {{ isSaving ? 'sync' : 'cloud_done' }}
+          </span>
+          <span class="status-text font-mono">
+            {{ isSaving ? 'Saving...' : 'Saved' }}
+          </span>
+        </div>
+        <button class="copy-url-btn font-mono"
+          (click)="copyNotepadUrl()"
+          title="Copy your notepad link">
+          <span class="material-symbols-outlined">content_copy</span>
+          COPY LINK
+        </button>
+        <button class="save-btn" (click)="manualSave()"
+          [disabled]="isSaving">
+          Save Note
         </button>
       </div>
     </header>
 
+    <!-- Main editor -->
     <main class="main-content">
-      <!-- Editor Canvas -->
-      <div class="editor-canvas">
-        <!-- Line Numbers -->
-        <div class="line-numbers-col hidden-mobile">
-          <span *ngFor="let line of lineNumbers; let i = index">{{ i + 1 | number:'2.0' }}</span>
+      <div class="editor-meta">
+        <div class="meta-left">
+          <span class="folio-rule"></span>
+          <span class="folio-label font-mono">YOUR NOTEPAD</span>
         </div>
+        <span class="whispering font-mono">
+          {{ isSaving ? 'SAVING TO VAULT...' : 'ALL CHANGES SAVED' }}
+        </span>
+      </div>
 
-        <!-- Editor Text Area -->
-        <div class="textarea-container">
-          <textarea class="notepad-textarea" [(ngModel)]="content" (input)="onContentChange()" placeholder=""
-            [maxLength]="characterLimit" spellcheck="false"></textarea>
-        </div>
+      <div class="editor-canvas">
+        <textarea
+          class="notepad-textarea"
+          [(ngModel)]="content"
+          (input)="onContentChange()"
+          placeholder="Begin your reflection..."
+          [maxLength]="characterLimit"
+          spellcheck="false">
+        </textarea>
       </div>
     </main>
 
+    <!-- Right sidebar -->
+    <aside class="editor-sidebar">
+      <button class="sidebar-btn"
+        (click)="togglePasswordSetup()"
+        [class.active]="notepad?.isProtected"
+        title="Password protection">
+        <span class="material-symbols-outlined">
+          {{ notepad?.isProtected ? 'lock' : 'lock_open' }}
+        </span>
+      </button>
+      <button class="sidebar-btn copy-sidebar-btn"
+        (click)="copyNotepadUrl()"
+        title="Copy notepad link">
+        <span class="material-symbols-outlined">content_copy</span>
+      </button>
+    </aside>
+
     <!-- Footer -->
     <footer class="bottom-footer">
-      <div class="footer-content">
-        <div class="footer-left">
-          <p class="draft-status-footer text-outline-variant font-mono uppercase tracking-widest">Draft Status: Saved
-          </p>
-          <div class="expiry-alert">
-            <span class="expiry-text text-on-surface font-headline font-bold">This note will be deleted in {{
-              daysUntilExpiry }} days.</span>
-          </div>
+      <div class="footer-left">
+        <span class="expiry-text font-mono">
+          Your notepad holds up to {{ characterLimit | number }} characters.
+        </span>
+      </div>
+      <div class="footer-right">
+        <div class="footer-links">
+          <a href="#">Terms</a>
+          <a href="#">Support</a>
         </div>
-        <div class="footer-right">
-          <div class="footer-links">
-            <a href="#">Terms</a>
-            <a href="#">Support</a>
-          </div>
-          <div class="storage-bar hidden-mobile">
-            <div class="storage-fill" [style.width.%]="(characterCount / characterLimit) * 100"></div>
+        <div class="storage-bar">
+          <div class="storage-fill"
+            [style.width.%]="(characterCount / characterLimit) * 100">
           </div>
         </div>
       </div>
     </footer>
 
-    <!-- Password Prompt Overlay -->
+    <!-- Password modal -->
     <div class="overlay" *ngIf="showPasswordPrompt">
-      <div class="password-modal elegant-modal">
-        <h2 class="modal-title font-headline">Protected Document</h2>
-        <p class="modal-subtitle font-body text-outline" *ngIf="notepad?.passwordHint">Hint: {{ notepad?.passwordHint }}
+      <div class="password-modal">
+        <h2 class="modal-title font-headline">This notepad is private</h2>
+        <p class="modal-hint font-mono" *ngIf="notepad?.passwordHint">
+          Hint: {{ notepad?.passwordHint }}
         </p>
         <div class="modal-input-group">
           <span class="material-symbols-outlined input-icon">key</span>
-          <input type="password" class="elegant-input font-mono" [(ngModel)]="passwordInput"
-            placeholder="Enter manuscript key" (keyup.enter)="verifyPassword()" autofocus />
+          <input type="password" class="elegant-input font-mono"
+            [(ngModel)]="passwordInput"
+            placeholder="Enter your password"
+            (keyup.enter)="verifyPassword()"
+            autofocus />
         </div>
-        <div class="modal-actions">
-          <button class="elegant-btn" (click)="verifyPassword()">Unlock</button>
-        </div>
-        <p class="error-msg font-mono" *ngIf="passwordError">{{ passwordError }}</p>
+        <button class="elegant-btn" (click)="verifyPassword()">
+          Open Notepad
+        </button>
+        <p class="error-msg font-mono" *ngIf="passwordError">
+          {{ passwordError }}
+        </p>
       </div>
     </div>
+
   </ng-container>
 </div>

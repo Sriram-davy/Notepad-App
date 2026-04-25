@@ -12,7 +12,6 @@ export interface NotepadResponse {
 
 export interface SaveNotepadRequest {
   content: string;
-  password?: string;
 }
 
 export interface VerifyPasswordRequest {
@@ -20,7 +19,6 @@ export interface VerifyPasswordRequest {
 }
 
 export interface PasswordRequest {
-  currentPassword?: string;
   newPassword: string;
   hint?: string;
 }

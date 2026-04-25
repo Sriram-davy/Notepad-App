@@ -1,20 +1,29 @@
+import { HostListener } from '@angular/core';
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotepadService } from '../../services/notepad.service';
 import { NotepadResponse, SaveNotepadRequest, VerifyPasswordRequest } from '../../models/notepad.model';
-import { switchMap, tap, catchError, finalize } from 'rxjs/operators';
-import { interval, Subscription, Observable, of } from 'rxjs';
+import { switchMap, tap, catchError, finalize, debounceTime } from 'rxjs/operators';
+import { interval, Subscription, Observable, of, Subject } from 'rxjs';
+
+const IDLE_TIMEOUT_MS = 300000; // 5 minutes
 
 @Component({
   selector: 'app-notepad',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './notepad.component.html',
-  styleUrl: './notepad.component.css'
+  styleUrl: './notepad.component.scss'
 })
 export class NotepadComponent implements OnInit, OnDestroy {
+  // Idle timer state
+  private idleTimer: any = null;
+  idleWarning = false;
+  private readonly idleWarningMs = IDLE_TIMEOUT_MS - 30000; // 30s before timeout
+  private idleWarningTimer: any = null;
+  private destroy$ = new Subject<void>();
   notepad: NotepadResponse | null = null;
   content = '';
   passwordInput = '';
@@ -22,12 +31,14 @@ export class NotepadComponent implements OnInit, OnDestroy {
   showPasswordPrompt = false;
   isSaving = false;
   isLoading = true;
+  showToast = false;
   lastSaved: string | null = null;
   isDarkMode = false;
   characterCount = 0;
   characterLimit = 50000;
   daysUntilExpiry = 10;
   lineNumbers: number[] = [];
+  private contentChange$ = new Subject<string>();
   private autoSaveSubscription?: Subscription;
 
   get readingTimeEstimate(): string {
@@ -48,24 +59,73 @@ export class NotepadComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
+    // Sync dark mode from body
+    this.isDarkMode = document.body.classList.contains('dark-mode');
     const username = this.route.snapshot.paramMap.get('username');
     if (username) {
       this.loadNotepad(username);
     }
-
-    // Auto save every 30 seconds
-    this.autoSaveSubscription = interval(30000).pipe(
+    // Auto save 2.5 seconds after the user stops typing
+    this.autoSaveSubscription = this.contentChange$.pipe(
+      debounceTime(2500),
       switchMap(() => this.saveNotepad())
     ).subscribe();
+    this.startIdleTimer();
   }
 
   ngOnDestroy() {
     if (this.autoSaveSubscription) {
       this.autoSaveSubscription.unsubscribe();
     }
+    // Cancel idle timer
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer);
+    }
+    if (this.idleWarningTimer) {
+      clearTimeout(this.idleWarningTimer);
+    }
+    this.destroy$.next();
+    this.destroy$.complete();
     if (this.notepad && this.notepad.username) {
       this.notepadService.removeToken(this.notepad.username);
     }
+  }
+
+  // ── IDLE TIMER LOGIC ──────────────────────────────
+  private startIdleTimer() {
+    this.clearIdleTimers();
+    this.idleWarning = false;
+    this.idleWarningTimer = setTimeout(() => {
+      this.idleWarning = true;
+    }, this.idleWarningMs);
+    this.idleTimer = setTimeout(() => {
+      this.handleIdleTimeout();
+    }, IDLE_TIMEOUT_MS);
+  }
+
+  private clearIdleTimers() {
+    if (this.idleTimer) {
+      clearTimeout(this.idleTimer);
+      this.idleTimer = null;
+    }
+    if (this.idleWarningTimer) {
+      clearTimeout(this.idleWarningTimer);
+      this.idleWarningTimer = null;
+    }
+  }
+
+  private handleIdleTimeout() {
+    this.idleWarning = false;
+    this.router.navigate(['/']);
+  }
+
+  @HostListener('document:mousemove')
+  @HostListener('document:keydown')
+  @HostListener('document:mousedown')
+  @HostListener('document:touchstart')
+  @HostListener('document:scroll')
+  onUserActivity() {
+    this.startIdleTimer();
   }
 
   loadNotepad(username: string) {
@@ -116,6 +176,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
   onContentChange() {
     this.characterCount = this.content.length;
     this.updateLineNumbers();
+    this.contentChange$.next(this.content);
   }
 
   manualSave() {
@@ -126,8 +187,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
     if (!this.notepad || this.showPasswordPrompt) return of(null);
 
     const request: SaveNotepadRequest = {
-      content: this.content,
-      password: this.notepad.isProtected ? this.passwordInput : undefined
+      content: this.content
     };
 
     this.isSaving = true;
@@ -139,6 +199,10 @@ export class NotepadComponent implements OnInit, OnDestroy {
           this.notepad.expiresAt = response.expiresAt;
         }
         this.daysUntilExpiry = Math.ceil((new Date(response.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
+
+        // Show Toast
+        this.showToast = true;
+        setTimeout(() => this.showToast = false, 3000);
       }),
       catchError((error) => {
         this.isSaving = false;
@@ -159,6 +223,11 @@ export class NotepadComponent implements OnInit, OnDestroy {
 
   toggleTheme() {
     this.isDarkMode = !this.isDarkMode;
+    if (this.isDarkMode) {
+      document.body.classList.add('dark-mode');
+    } else {
+      document.body.classList.remove('dark-mode');
+    }
   }
 
   updateLineNumbers() {
@@ -184,5 +253,17 @@ export class NotepadComponent implements OnInit, OnDestroy {
 
   navigateLogo() {
     this.router.navigate(['/']);
+  }
+
+  copyNotepadUrl() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+      const btn = document.querySelector('.copy-url-btn') as HTMLElement;
+      if (btn) {
+        const original = btn.innerHTML;
+        btn.innerHTML = '<span class="material-symbols-outlined">check</span> COPIED!';
+        setTimeout(() => { btn.innerHTML = original; }, 2000);
+      }
+    });
   }
 }
