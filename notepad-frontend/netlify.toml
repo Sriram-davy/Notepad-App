@@ -1,6 +1,6 @@
 [build]
   command = "npm run build"
-  publish = "dist/notepad-frontend/browser"
+  publish = "dist/slashpad-frontend/browser"
 
 [[redirects]]
   from = "/*"

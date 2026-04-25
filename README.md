@@ -35,7 +35,7 @@ Edit `src/environments/environment.ts` for API base URL:
 
 Deploy to Netlify:
 1. Build the project
-2. Upload `dist/notepad-frontend/browser` folder
+2. Upload `dist/slashpad-frontend/browser` folder
 3. Configure redirects in `netlify.toml`
 
 ## Components
