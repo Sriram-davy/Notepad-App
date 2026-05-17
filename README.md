@@ -2,6 +2,8 @@
 
 Angular 19 frontend for the SlashPad personal notepad application.
 
+Working application hosted on : https://slashpad.netlify.app/
+
 ## Features
 
 - Clean, minimalist UI with glassmorphism design
