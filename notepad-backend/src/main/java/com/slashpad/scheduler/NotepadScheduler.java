@@ -25,6 +25,8 @@ public class NotepadScheduler {
     @Scheduled(cron = "0 0 0 * * *") // Every day at midnight
     @Transactional
     public void deleteExpiredNotepads() {
+        // Deletion logic temporarily commented out as requested
+        /*
         LocalDateTime now = LocalDateTime.now();
         List<Notepad> expiredNotepads = repository.findByExpiresAtBefore(now);
 
@@ -34,5 +36,7 @@ public class NotepadScheduler {
         } else {
             logger.info("No expired notepads to delete");
         }
+        */
+        logger.info("Data deletion logic is currently disabled.");
     }
 }

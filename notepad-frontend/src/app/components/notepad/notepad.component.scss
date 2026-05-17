@@ -147,8 +147,18 @@
   align-items: center;
   gap: 0.4rem;
   color: var(--ink-muted);
+  transition: color 0.3s ease;
+  
+  &.is-saving {
+    color: var(--gold);
+  }
 }
-.status-icon { font-size: 0.9rem; }
+.status-icon { 
+  font-size: 0.9rem; 
+  &.spin {
+    animation: spin 1.2s linear infinite;
+  }
+}
 .status-text {
   font-size: 0.6rem;
   letter-spacing: 0.1em;
@@ -241,6 +251,18 @@
   letter-spacing: 0.15em;
   color: var(--ink-faint);
   text-transform: uppercase;
+  transition: color 0.3s ease, opacity 0.3s ease;
+  
+  &.is-saving {
+    color: var(--gold);
+    animation: pulseOpacity 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes pulseOpacity {
+  0% { opacity: 1; }
+  50% { opacity: 0.4; }
+  100% { opacity: 1; }
 }
 
 .editor-canvas {

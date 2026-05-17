@@ -33,8 +33,8 @@
         <span class="char-count font-mono">
           {{ characterCount | number }} / {{ characterLimit | number }}
         </span>
-        <div class="save-status">
-          <span class="material-symbols-outlined status-icon">
+        <div class="save-status" [class.is-saving]="isSaving">
+          <span class="material-symbols-outlined status-icon" [class.spin]="isSaving">
             {{ isSaving ? 'sync' : 'cloud_done' }}
           </span>
           <span class="status-text font-mono">
@@ -61,8 +61,8 @@
           <span class="folio-rule"></span>
           <span class="folio-label font-mono">YOUR NOTEPAD</span>
         </div>
-        <span class="whispering font-mono">
-          {{ isSaving ? 'SAVING TO VAULT...' : 'ALL CHANGES SAVED' }}
+        <span class="whispering font-mono" [class.is-saving]="isSaving">
+          {{ lastSavedText }}
         </span>
       </div>
 
@@ -104,8 +104,8 @@
       </div>
       <div class="footer-right">
         <div class="footer-links">
-          <a href="#">Terms</a>
-          <a href="#">Support</a>
+          <a href="javascript:void(0)" (click)="nav.navigateToTerms()">Terms</a>
+          <a href="javascript:void(0)" (click)="nav.navigateToSupport()">Support</a>
         </div>
         <div class="storage-bar">
           <div class="storage-fill"

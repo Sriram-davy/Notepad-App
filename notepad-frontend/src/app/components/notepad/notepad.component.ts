@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NotepadService } from '../../services/notepad.service';
+import { NavigationService } from '../../services/navigation.service';
 import { NotepadResponse, SaveNotepadRequest, VerifyPasswordRequest } from '../../models/notepad.model';
 import { switchMap, tap, catchError, finalize, debounceTime } from 'rxjs/operators';
 import { interval, Subscription, Observable, of, Subject } from 'rxjs';
@@ -40,6 +41,8 @@ export class NotepadComponent implements OnInit, OnDestroy {
   lineNumbers: number[] = [];
   private contentChange$ = new Subject<string>();
   private autoSaveSubscription?: Subscription;
+  private timeAgoSubscription?: Subscription;
+  lastSavedText = 'ALL CHANGES SAVED';
 
   get readingTimeEstimate(): string {
     // Approx 200 words per minute, 5 characters per word = 1000 chars per minute.
@@ -55,7 +58,8 @@ export class NotepadComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private notepadService: NotepadService
+    private notepadService: NotepadService,
+    public nav: NavigationService
   ) { }
 
   ngOnInit() {
@@ -71,11 +75,17 @@ export class NotepadComponent implements OnInit, OnDestroy {
       switchMap(() => this.saveNotepad())
     ).subscribe();
     this.startIdleTimer();
+    this.timeAgoSubscription = interval(60000).subscribe(() => {
+      this.updateLastSavedText();
+    });
   }
 
   ngOnDestroy() {
     if (this.autoSaveSubscription) {
       this.autoSaveSubscription.unsubscribe();
+    }
+    if (this.timeAgoSubscription) {
+      this.timeAgoSubscription.unsubscribe();
     }
     // Cancel idle timer
     if (this.idleTimer) {
@@ -137,9 +147,11 @@ export class NotepadComponent implements OnInit, OnDestroy {
         this.characterLimit = response.characterLimit;
         this.daysUntilExpiry = response.daysUntilExpiry;
         this.content = response.content || '';
+        this.lastSaved = response.lastSaved || null;
         this.showPasswordPrompt = false;
         this.isLoading = false;
         this.updateLineNumbers();
+        this.updateLastSavedText();
       },
       error: (error) => {
         this.isLoading = false;
@@ -191,10 +203,12 @@ export class NotepadComponent implements OnInit, OnDestroy {
     };
 
     this.isSaving = true;
+    this.updateLastSavedText();
     return this.notepadService.saveNotepad(this.notepad.username, request).pipe(
       tap((response) => {
         this.isSaving = false;
         this.lastSaved = new Date().toISOString();
+        this.updateLastSavedText();
         if (this.notepad) {
           this.notepad.expiresAt = response.expiresAt;
         }
@@ -206,6 +220,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
       }),
       catchError((error) => {
         this.isSaving = false;
+        this.updateLastSavedText();
         console.error('Error saving notepad:', error);
         return of(null);
       }),
@@ -244,6 +259,16 @@ export class NotepadComponent implements OnInit, OnDestroy {
     if (diffMins < 60) return `${diffMins} minutes ago`;
     const diffHours = Math.floor(diffMins / 60);
     return `${diffHours} hours ago`;
+  }
+
+  updateLastSavedText() {
+    if (this.isSaving) {
+      this.lastSavedText = 'SAVING TO VAULT...';
+    } else if (this.lastSaved) {
+      this.lastSavedText = `LAST SAVED ${this.getTimeAgo(this.lastSaved).toUpperCase()}`;
+    } else {
+      this.lastSavedText = 'ALL CHANGES SAVED';
+    }
   }
 
   formatExpiryDate(dateString: string | undefined): string {
