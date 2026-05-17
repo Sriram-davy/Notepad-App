@@ -3,11 +3,11 @@
 
   <header class="top-nav-bar">
     <div class="nav-left">
-      <span class="logo" routerLink="/">SlashPad</span>
+      <span class="logo" (click)="nav.navigateToHome()" style="cursor: pointer;">SlashPad</span>
     </div>
     <div class="nav-right">
-      <button class="nav-link">Privacy</button>
-      <button class="nav-link">Support</button>
+      <button class="nav-link" (click)="nav.navigateToPrivacy()">Privacy</button>
+      <button class="nav-link" (click)="nav.navigateToSupport()">Support</button>
     </div>
   </header>
 
@@ -105,9 +105,9 @@
 
   <footer class="bottom-footer">
     <div class="footer-links">
-      <a href="#">Privacy</a>
-      <a href="#">Terms</a>
-      <a href="#">Support</a>
+      <a href="javascript:void(0)" (click)="nav.navigateToPrivacy()">Privacy</a>
+      <a href="javascript:void(0)" (click)="nav.navigateToTerms()">Terms</a>
+      <a href="javascript:void(0)" (click)="nav.navigateToSupport()">Support</a>
     </div>
     <p class="footer-meta">© 2026 SLASHPAD · CRAFTED FOR PRIVACY · BY SRIRAM DAVY</p>
   </footer>

@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { NavigationService } from '../../services/navigation.service';
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -12,7 +13,7 @@ import { FormsModule } from '@angular/forms';
 export class HomeComponent {
   username = '';
 
-  constructor(private router: Router) { }
+  constructor(private router: Router, public nav: NavigationService) { }
 
   openNotepad() {
     if (this.username.trim()) {
