@@ -36,6 +36,9 @@ SlashPad is a highly private, ephemeral yet permanent digital ledger and notepad
   - `PasswordSetupComponent`: End-to-end security key management
   - `PasswordPromptComponent`: Security challenge overlay
   - `NotFoundComponent`: Standardized 404 handler
+  - `PrivacyComponent`: Data handling policy
+  - `TermsComponent`: Conditions of use
+  - `SupportComponent`: Help and contact information
 
 **Security Flow (Frontend):**
 1. User navigates to `/:username` → `GET /api/notepad/{username}`
