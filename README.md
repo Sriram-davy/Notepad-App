@@ -45,6 +45,9 @@ Deploy to Netlify:
 - `PasswordSetupComponent` - Password management
 - `PasswordPromptComponent` - Password entry overlay
 - `NotFoundComponent` - 404 page
+- `PrivacyComponent` - Data handling policy
+- `TermsComponent` - Conditions of use
+- `SupportComponent` - Help and contact information
 
 # SlashPad Backend
 
@@ -54,9 +57,9 @@ Spring Boot backend for the SlashPad personal notepad application.
 
 - REST API for notepad management
 - Password protection with BCrypt hashing
-- Automatic expiry after 10 days
-- Scheduled cleanup and backup tasks
-- H2 in-memory database
+- Persistent notes (automatic expiry disabled)
+- Scheduled backend maintenance tasks
+- PostgreSQL database
 - CORS configuration for Angular frontend
 
 ## API Endpoints
@@ -81,7 +84,6 @@ The application will start on http://localhost:8080
 
 Edit `src/main/resources/application.properties` for custom settings:
 - `notepad.character.limit` - Max characters (default: 50000)
-- `notepad.expiry.days` - Expiry days (default: 10)
 
 ## Production Deployment
 
