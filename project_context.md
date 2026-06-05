@@ -22,13 +22,19 @@ SlashPad is a highly private, ephemeral yet permanent digital ledger and notepad
 - **Responsiveness:** Fluid grid layouts tailored for mobile, tablet, and desktop viewing.
 
 **Key Features & Logic:**
-- **Path-Based Routing:** Users enter a unique path (e.g., `/sriramdavy`) to instantly access or dynamically instantiate a private notepad instance.
-- **Smart Auto-Save:** Incorporates RxJS Subjects and `debounceTime(2500)` to silently auto-save content 2.5 seconds *after* the user stops typing.
-- **Security Mechanics:** 
-  - Password setup is **optional** — all notepads are public by default.
-  - If a password is set, the user must enter it on every fresh page load.
-  - Upon successful password verification, the backend issues a **JWT token** stored in Angular's ephemeral memory (not localStorage/cookies — wiped on page refresh).
-  - All subsequent operations (auto-saves, password changes) ride the JWT via an `HttpInterceptor` — **no raw passwords are ever transmitted during auto-save**.
+- **Path-Based Routing & Breadcrumb Dropdown:** Users enter a unique path (e.g., `/sriramdavy`) to instantly instantiate notepads. The logo header features an interactive breadcrumb dropdown with:
+  - **Inline Renaming:** Rename note URL inline, prompting to copy current content or navigate to blank pad.
+  - **Recent Pads History:** Local storage lists up to 5 recently visited pads.
+  - **Quick Links:** Quick copy of pad URL and read-only share links.
+- **Smart Auto-Save:** Incorporates RxJS Subjects and `debounceTime(2500)` to silently auto-save content 2.5 seconds *after* typing ceases.
+- **Client-Side Encryption & Key Safety:** 
+  - Optional zero-knowledge AES-256-GCM browser encryption.
+  - Clear stale decrypt-only read-only keys when authenticating as owner to prevent Web Crypto key usage conflicts.
+- **Viewport-Locked Layout:** Container locked to `100vh` with independent editor scroll, eliminating double scrollbars. Synced line numbers gutter on the left.
+- **Dynamic State Subheader:** Dynamic headers indicating notepad status (`READ-ONLY ARCHIVE`, `SECURED VAULT`, `TEMP SCRATCHPAD`).
+- **Verbose Limits & Read Time:** Footer displays estimated reading time alongside a character usage counter (fraction + percentage).
+- **Context-Aware Navigation:** Tracks active notepad in `sessionStorage`. Static pages (Terms, Privacy, Support) show a dynamic back button (`Back to Notepad` vs `Back to Home`) routing users back to their active note.
+- **Premium UI Styling:** Frosted glass headers/footers with blur, neon gold focus glow outlines on input forms, active button gradients, and glossy sweep ray-of-light transitions.
 - **5-Minute Idle Timeout:** Inactive sessions are ejected back to the home page.
 - **Component Map:**
   - `HomeComponent`: The landing page "Sanctuary"

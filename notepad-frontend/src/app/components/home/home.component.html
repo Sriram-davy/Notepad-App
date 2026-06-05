@@ -3,112 +3,82 @@
 
   <header class="top-nav-bar">
     <div class="nav-left">
-      <span class="logo" (click)="nav.navigateToHome()" style="cursor: pointer;">SlashPad</span>
+      <span class="logo" (click)="nav.navigateToHome()">SlashPad</span>
     </div>
     <div class="nav-right">
       <button class="nav-link" (click)="nav.navigateToPrivacy()">Privacy</button>
+      <button class="nav-link" (click)="nav.navigateToTerms()">Terms</button>
       <button class="nav-link" (click)="nav.navigateToSupport()">Support</button>
     </div>
   </header>
 
   <main class="hero-section">
     <div class="hero-content">
-      <p class="hero-kicker">YOUR PRIVATE CANVAS</p>
+      <p class="hero-kicker">— YOUR PRIVATE CANVAS —</p>
       <h1 class="hero-title">
         The <span class="gold-italic">Sanctuary</span><br>
         of Thought.
       </h1>
       <p class="hero-subtitle">
-        A canvas for your thoughts. No logins, no tracking.<br>
-        Your unique URL is the only key to your notepad.
+        Choose a name, start writing. No accounts, no tracking.<br>
+        Your path is the only key to your private notepad.
       </p>
 
       <div class="url-input-row">
         <div class="url-input-wrapper">
           <span class="url-prefix">slashpad.netlify.app/</span>
-          <input class="notepad-input font-mono" type="text" [(ngModel)]="username" placeholder="name-your-path..."
+          <input class="notepad-input font-mono" type="text" [(ngModel)]="username" placeholder="your-secret-name..."
             (keyup.enter)="openNotepad()" maxlength="50" autofocus />
         </div>
         <button class="enter-btn" (click)="openNotepad()" [disabled]="!username.trim()">
-          Enter Sanctuary
-          <span class="btn-arrow">→</span>
+          Enter Sanctuary &rarr; &nbsp;
         </button>
       </div>
 
-      <div class="trust-badges">
-        <span class="badge">
-          <span class="material-symbols-outlined">lock</span>
-          END-TO-END PRIVATE
-        </span>
-        <span class="badge">
-          <span class="material-symbols-outlined">cloud_done</span>
-          AUTO-SAVING
-        </span>
+      <div class="trust-bullets font-mono">
+        <span class="bullet-item">&bull; END-TO-END PRIVATE</span>
+        <span class="bullet-item">&bull; AUTO-SAVING</span>
+        <span class="bullet-item">&bull; NO LOGIN REQUIRED</span>
       </div>
     </div>
   </main>
 
-  <section class="features-section">
-    <div class="feature-image-col">
-      <div class="feature-image-block"></div>
-      <div class="feature-caption">
-        <p class="caption-title gold-text">Private yet Permanent.</p>
-        <p class="caption-body">
-          SlashPad treats your writing as sacred.
-          Return anytime via your unique link.
-        </p>
+  <section class="bottom-cards-grid">
+    <!-- Card 1: Password Protection -->
+    <div class="feature-card">
+      <span class="free-badge">FREE</span>
+      <div class="card-icon-box">
+        <span class="material-symbols-outlined">lock</span>
       </div>
+      <h3 class="card-title">Password Protection</h3>
+      <p class="card-description">Lock your notepad with a password. Only you can open it — even we can't read it.</p>
     </div>
-    <div class="feature-text-col">
-      <div class="gold-rule"></div>
-      <h2 class="feature-heading">The Ledger of<br>Your Private Life.</h2>
-      <p class="feature-body">
-        No directories, no search engines. Just the direct
-        link between your mind and your private canvas.
-      </p>
-      <div class="feature-items">
-        <div class="feature-item">
-          <span class="material-symbols-outlined gold-text">encrypted</span>
-          <div>
-            <p class="item-title">Private by Design</p>
-            <p class="item-body">Your data is yours. Access it only with your link.</p>
-          </div>
-        </div>
-        <div class="feature-item">
-          <span class="material-symbols-outlined gold-text">edit_note</span>
-          <div>
-            <p class="item-title">Up to 50,000 Characters</p>
-            <p class="item-body">Generous space for long-form writing and journaling.</p>
-          </div>
-        </div>
+
+    <!-- Card 2: Read-Only Sharing -->
+    <div class="feature-card">
+      <div class="card-icon-box">
+        <span class="material-symbols-outlined">share</span>
       </div>
+      <h3 class="card-title">Read-Only Sharing</h3>
+      <p class="card-description">Share a view-only link with anyone. They read; only you can edit.</p>
+    </div>
+
+    <!-- Card 3: Download as Text -->
+    <div class="feature-card">
+      <div class="card-icon-box">
+        <span class="material-symbols-outlined">description</span>
+      </div>
+      <h3 class="card-title">Download as Text</h3>
+      <p class="card-description">Export your entire notepad as a plain .txt file anytime, no strings attached.</p>
+    </div>
+
+    <!-- Card 4: Any Device, Anywhere -->
+    <div class="feature-card">
+      <div class="card-icon-box">
+        <span class="material-symbols-outlined">smartphone</span>
+      </div>
+      <h3 class="card-title">Any Device, Anywhere</h3>
+      <p class="card-description">Open your notepad from any phone, tablet, or computer. It's always there.</p>
     </div>
   </section>
-
-  <section class="cards-section">
-    <div class="info-card">
-      <span class="material-symbols-outlined gold-text">edit</span>
-      <h3 class="card-heading">Writing</h3>
-      <p class="card-body">Raw, unfiltered, and private. Start writing instantly.</p>
-    </div>
-    <div class="info-card">
-      <span class="material-symbols-outlined gold-text">link</span>
-      <h3 class="card-heading">Your Link</h3>
-      <p class="card-body">Your custom path is the only key. Keep it safe.</p>
-    </div>
-    <div class="info-card">
-      <span class="material-symbols-outlined gold-text">lock</span>
-      <h3 class="card-heading">Protected</h3>
-      <p class="card-body">Add a password. Only you can unlock your notepad.</p>
-    </div>
-  </section>
-
-  <footer class="bottom-footer">
-    <div class="footer-links">
-      <a href="javascript:void(0)" (click)="nav.navigateToPrivacy()">Privacy</a>
-      <a href="javascript:void(0)" (click)="nav.navigateToTerms()">Terms</a>
-      <a href="javascript:void(0)" (click)="nav.navigateToSupport()">Support</a>
-    </div>
-    <p class="footer-meta">© 2026 SLASHPAD · CRAFTED FOR PRIVACY · BY SRIRAM DAVY</p>
-  </footer>
 </div>

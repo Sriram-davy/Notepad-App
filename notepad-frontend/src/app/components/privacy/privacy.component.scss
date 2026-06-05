@@ -5,20 +5,30 @@
   padding: 4rem 2rem;
   font-family: 'Inter', sans-serif;
 }
+
 .page-content {
   max-width: 800px;
   margin: 0 auto;
 }
+
 .header {
   margin-bottom: 3rem;
 }
+
 .header h1 {
   font-family: 'Newsreader', serif;
   color: var(--gold, #c9a84c);
   font-size: 2.5rem;
   font-weight: 400;
+  margin: 0 0 0.5rem 0;
+}
+
+.last-updated {
+  font-size: 0.8rem;
+  color: var(--ink-muted, #555);
   margin: 0;
 }
+
 .back-btn {
   background: none;
   border: none;
@@ -30,24 +40,70 @@
   padding: 0;
   transition: color 0.2s;
 }
+
 .back-btn:hover {
   color: var(--gold, #c9a84c);
 }
+
 .section {
   margin-bottom: 2.5rem;
 }
+
 .section h2 {
   font-family: 'Newsreader', serif;
   color: var(--ink, #eaeaea);
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 400;
   margin-top: 0;
   margin-bottom: 1rem;
-  border-bottom: 1px solid var(--obsidian-border, #333);
+  border-bottom: 1px solid var(--obsidian-border, #2a2a2a);
   padding-bottom: 0.5rem;
 }
+
 .section p {
-  color: var(--ink-muted, #888);
-  line-height: 1.7;
-  margin: 0;
+  color: var(--ink-muted, #999);
+  line-height: 1.8;
+  margin: 0 0 0.75rem 0;
+}
+
+.section ul {
+  color: var(--ink-muted, #999);
+  line-height: 1.8;
+  padding-left: 1.5rem;
+  margin: 0.5rem 0 0.75rem 0;
+}
+
+.section ul li {
+  margin-bottom: 0.35rem;
+}
+
+.section strong {
+  color: var(--ink, #eaeaea);
+  font-weight: 500;
+}
+
+.section code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.85em;
+  background: var(--obsidian-surface, #1e1e1e);
+  color: var(--gold, #c9a84c);
+  padding: 0.1em 0.4em;
+  border-radius: 3px;
+}
+
+.section em {
+  color: var(--ink, #eaeaea);
+  font-style: italic;
+}
+
+.link {
+  color: var(--gold, #c9a84c);
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: opacity 0.2s;
+}
+
+.link:hover {
+  opacity: 0.75;
 }

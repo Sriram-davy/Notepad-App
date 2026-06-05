@@ -43,6 +43,12 @@ public class Notepad {
     @Column(name = "expires_at", nullable = false)
     private LocalDateTime expiresAt;
 
+    @Column(name = "last_content_saved_at")
+    private LocalDateTime lastContentSavedAt;
+
+    @Column(name = "burn_after_read", nullable = false)
+    private Boolean burnAfterRead = false;
+
     // Removed lastBackedUpAt (backup logic is being removed)
 
     // Custom setter for content to enforce character limit

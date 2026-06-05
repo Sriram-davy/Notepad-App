@@ -1,4 +1,4 @@
-<div class="notepad-container" [class.dark-mode]="isDarkMode">
+<div class="notepad-container">
   <div class="noise-overlay"></div>
 
   <!-- Loading -->
@@ -9,20 +9,52 @@
 
   <ng-container *ngIf="!isLoading">
 
-    <!-- Idle warning -->
-    <div class="idle-warning" *ngIf="idleWarning">
-      Still writing? Your notepad closes in 30 seconds — your work is already saved.
-    </div>
-
     <!-- Header -->
     <header class="top-nav-bar">
       <div class="nav-left">
         <span class="logo" (click)="navigateLogo()">SlashPad</span>
-        <span class="notepad-path">/{{ notepad?.username }}</span>
+
+        <div class="breadcrumb-container">
+          <span class="breadcrumb-divider">/</span>
+          <div class="breadcrumb-badge" [class.active]="showBreadcrumbDropdown"
+            (click)="toggleBreadcrumbDropdown($event)">
+            <span class="path-name" *ngIf="!isEditingPath">{{ notepad?.username }}</span>
+            <input type="text" class="path-input font-mono" *ngIf="isEditingPath" [(ngModel)]="newPathInput"
+              (keyup.enter)="confirmRename()" (keyup.escape)="cancelRename()" (blur)="confirmRename()" />
+            <span class="material-symbols-outlined badge-chevron" *ngIf="!isEditingPath">expand_more</span>
+          </div>
+
+          <!-- Dropdown Menu -->
+          <div class="breadcrumb-dropdown" *ngIf="showBreadcrumbDropdown">
+            <div class="dropdown-header">PAD ACTIONS</div>
+            <button class="dropdown-item" (click)="startRename($event)" [disabled]="isReadOnly">
+              <span class="material-symbols-outlined">edit</span>
+              <span>Rename Pad URL</span>
+            </button>
+            <button class="dropdown-item" (click)="copyNotepadUrl()">
+              <span class="material-symbols-outlined">link</span>
+              <span>Copy URL Link</span>
+            </button>
+            <button class="dropdown-item" (click)="shareNotepad()" *ngIf="!isReadOnly">
+              <span class="material-symbols-outlined">share</span>
+              <span>Share Read-Only Link</span>
+            </button>
+
+            <div class="dropdown-divider"></div>
+            <div class="dropdown-header">RECENT PADS</div>
+            <div class="recent-list">
+              <button class="recent-item" *ngFor="let pad of recentPads" (click)="navigateToPad(pad)">
+                <span class="material-symbols-outlined">sticky_note_2</span>
+                <span class="pad-username">{{ pad }}</span>
+              </button>
+              <div class="empty-recent font-mono" *ngIf="recentPads.length === 0">No recent pads</div>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="nav-right">
-        <div class="secure-badge" [class.protected]="notepad?.isProtected"
-          (click)="togglePasswordSetup()" title="Password Protection">
+        <div class="secure-badge" [class.protected]="notepad?.isProtected" (click)="togglePasswordSetup()"
+          title="Password Protection" *ngIf="!isReadOnly">
           <span class="material-symbols-outlined">
             {{ notepad?.isProtected ? 'lock' : 'lock_open' }}
           </span>
@@ -41,25 +73,45 @@
             {{ isSaving ? 'Saving...' : 'Saved' }}
           </span>
         </div>
-        <button class="copy-url-btn font-mono"
-          (click)="copyNotepadUrl()"
-          title="Copy your notepad link">
-          <span class="material-symbols-outlined">content_copy</span>
-          COPY LINK
+        <button class="options-btn font-mono" (click)="toggleOptionsPanel()" *ngIf="!isReadOnly"
+          [class.active]="showOptionsPanel" title="Note Options">
+          <span class="material-symbols-outlined">tune</span>
+          OPTIONS
         </button>
-        <button class="save-btn" (click)="manualSave()"
-          [disabled]="isSaving">
+        <button class="export-btn font-mono" (click)="exportAsTxt()" title="Download as .txt">
+          <span class="material-symbols-outlined">download</span>
+          EXPORT
+        </button>
+        <button class="save-btn" (click)="manualSave()" [disabled]="isSaving || isReadOnly">
           Save Note
         </button>
       </div>
     </header>
+
+    <!-- Banners inline in the flex flow -->
+    <div class="idle-warning" *ngIf="idleWarning">
+      Still writing? Your notepad closes in 30 seconds — your work is already saved.
+    </div>
+
+    <div class="readonly-banner" *ngIf="isReadOnly">
+      <span class="material-symbols-outlined">visibility</span>
+      You are viewing a shared read-only copy. Changes are not saved.
+    </div>
+
+    <!-- Share toast overlay -->
+    <div class="share-toast" *ngIf="shareToastMsg">{{ shareToastMsg }}</div>
 
     <!-- Main editor -->
     <main class="main-content">
       <div class="editor-meta">
         <div class="meta-left">
           <span class="folio-rule"></span>
-          <span class="folio-label font-mono">YOUR NOTEPAD</span>
+          <span class="folio-label font-mono">
+            <span *ngIf="isReadOnly">READ-ONLY ARCHIVE</span>
+            <span *ngIf="!isReadOnly && notepad?.isProtected">SECURED VAULT</span>
+            <span *ngIf="!isReadOnly && !notepad?.isProtected">TEMP SCRATCHPAD</span>
+            / {{ notepad?.username | uppercase }}
+          </span>
         </div>
         <span class="whispering font-mono" [class.is-saving]="isSaving">
           {{ lastSavedText }}
@@ -67,39 +119,94 @@
       </div>
 
       <div class="editor-canvas">
-        <textarea
-          class="notepad-textarea"
-          [(ngModel)]="content"
-          (input)="onContentChange()"
-          placeholder="Begin your reflection..."
-          [maxLength]="characterLimit"
-          spellcheck="false">
-        </textarea>
+        <div class="editor-card">
+          <div class="editor-gutter font-mono" #gutterRef>
+            <div class="gutter-line" *ngFor="let line of lineNumbers">{{ line }}</div>
+          </div>
+          <textarea class="notepad-textarea" #textareaRef (scroll)="onTextareaScroll()" [(ngModel)]="content"
+            (input)="onContentChange()" placeholder="Begin writing…" [maxLength]="characterLimit"
+            [readOnly]="isReadOnly" [class.readonly]="isReadOnly" spellcheck="false">
+          </textarea>
+        </div>
       </div>
     </main>
 
     <!-- Right sidebar -->
     <aside class="editor-sidebar">
-      <button class="sidebar-btn"
-        (click)="togglePasswordSetup()"
-        [class.active]="notepad?.isProtected"
-        title="Password protection">
-        <span class="material-symbols-outlined">
-          {{ notepad?.isProtected ? 'lock' : 'lock_open' }}
-        </span>
-      </button>
-      <button class="sidebar-btn copy-sidebar-btn"
-        (click)="copyNotepadUrl()"
-        title="Copy notepad link">
+      <button class="sidebar-btn" (click)="copyNotepadUrl()" title="Copy notepad link">
         <span class="material-symbols-outlined">content_copy</span>
       </button>
+      <button class="sidebar-btn" (click)="shareNotepad()" *ngIf="!isReadOnly" title="Share a read-only link">
+        <span class="material-symbols-outlined">share</span>
+      </button>
+      <button class="sidebar-btn" (click)="exportAsTxt()" title="Download as .txt">
+        <span class="material-symbols-outlined">download</span>
+      </button>
+    </aside>
+
+    <!-- ═══ NOTE OPTIONS PANEL ═══════════════════════════════════════════════ -->
+    <div class="options-overlay" *ngIf="showOptionsPanel" (click)="toggleOptionsPanel()"></div>
+    <aside class="options-panel" [class.open]="showOptionsPanel">
+      <div class="options-header">
+        <h3 class="options-title">Note Options</h3>
+        <button class="options-close" (click)="toggleOptionsPanel()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <!-- Option 1: Password -->
+      <div class="option-card" (click)="togglePasswordSetup()">
+        <div class="option-icon" [class.active]="notepad?.isProtected">
+          <span class="material-symbols-outlined">{{ notepad?.isProtected ? 'lock' : 'lock_open' }}</span>
+        </div>
+        <div class="option-text">
+          <span class="option-name">Password Protection</span>
+          <span class="option-desc">
+            {{ notepad?.isProtected ? 'This note is password-protected. Click to change or remove the password.' :
+            'Anyone with the link can view this note. Click to add a password.' }}
+          </span>
+        </div>
+        <span class="option-badge" [class.on]="notepad?.isProtected">
+          {{ notepad?.isProtected ? 'ON' : 'OFF' }}
+        </span>
+      </div>
+
+      <!-- Option 2: Share -->
+      <div class="option-card" (click)="shareNotepad()">
+        <div class="option-icon active-blue">
+          <span class="material-symbols-outlined">share</span>
+        </div>
+        <div class="option-text">
+          <span class="option-name">Share a Read-Only Link</span>
+          <span class="option-desc">
+            {{ notepad?.isProtected ? 'Copies a secure encrypted link. The recipient can read but cannot edit or see
+            your password.' : 'Copies a link anyone can open to view this note.' }}
+          </span>
+        </div>
+        <span class="material-symbols-outlined option-arrow">chevron_right</span>
+      </div>
+
+
+      <!-- Option 4: Export -->
+      <div class="option-card" (click)="exportAsTxt()">
+        <div class="option-icon">
+          <span class="material-symbols-outlined">download</span>
+        </div>
+        <div class="option-text">
+          <span class="option-name">Download as Text File</span>
+          <span class="option-desc">
+            Saves your note as a <strong>{{ notepad?.username }}.txt</strong> file on your device.
+          </span>
+        </div>
+        <span class="material-symbols-outlined option-arrow">chevron_right</span>
+      </div>
     </aside>
 
     <!-- Footer -->
     <footer class="bottom-footer">
       <div class="footer-left">
         <span class="expiry-text font-mono">
-          Your notepad holds up to {{ characterLimit | number }} characters.
+          ESTIMATED READ TIME: {{ readingTimeEstimate }}
         </span>
       </div>
       <div class="footer-right">
@@ -107,9 +214,14 @@
           <a href="javascript:void(0)" (click)="nav.navigateToTerms()">Terms</a>
           <a href="javascript:void(0)" (click)="nav.navigateToSupport()">Support</a>
         </div>
-        <div class="storage-bar">
-          <div class="storage-fill"
-            [style.width.%]="(characterCount / characterLimit) * 100">
+        <div class="storage-info font-mono"
+          title="Used {{ characterCount | number }} of {{ characterLimit | number }} characters">
+          <span class="storage-label">LIMIT USAGE:</span>
+          <span class="storage-count">{{ characterCount | number }} / {{ characterLimit | number }}</span>
+          <span class="storage-percent">({{ (characterCount / characterLimit) * 100 | number:'1.0-1' }}%)</span>
+          <div class="storage-bar">
+            <div class="storage-fill" [style.width.%]="(characterCount / characterLimit) * 100">
+            </div>
           </div>
         </div>
       </div>
@@ -119,16 +231,13 @@
     <div class="overlay" *ngIf="showPasswordPrompt">
       <div class="password-modal">
         <h2 class="modal-title font-headline">This notepad is private</h2>
-        <p class="modal-hint font-mono" *ngIf="notepad?.passwordHint">
-          Hint: {{ notepad?.passwordHint }}
+        <p class="modal-hint font-mono" *ngIf="notepad?.passwordHint || passwordHint">
+          Hint: {{ notepad?.passwordHint || passwordHint }}
         </p>
         <div class="modal-input-group">
           <span class="material-symbols-outlined input-icon">key</span>
-          <input type="password" class="elegant-input font-mono"
-            [(ngModel)]="passwordInput"
-            placeholder="Enter your password"
-            (keyup.enter)="verifyPassword()"
-            autofocus />
+          <input type="password" class="elegant-input font-mono" [(ngModel)]="passwordInput"
+            placeholder="Enter your password" (keyup.enter)="verifyPassword()" autofocus />
         </div>
         <button class="elegant-btn" (click)="verifyPassword()">
           Open Notepad
@@ -136,6 +245,27 @@
         <p class="error-msg font-mono" *ngIf="passwordError">
           {{ passwordError }}
         </p>
+      </div>
+    </div>
+
+    <!-- Rename confirmation modal -->
+    <div class="overlay" *ngIf="showRenameConfirm">
+      <div class="password-modal rename-modal">
+        <h2 class="modal-title font-headline">Move Notepad Content?</h2>
+        <p class="modal-hint font-mono" style="margin-bottom: 0.5rem;">
+          Would you like to move the current text to the new address <strong>/{{ pendingRenamePath }}</strong>?
+        </p>
+        <div class="rename-modal-buttons">
+          <button class="elegant-btn" (click)="executeRename(true)">
+            Move Content & Navigate
+          </button>
+          <button class="elegant-btn secondary-btn" (click)="executeRename(false)">
+            Just Navigate (Start Blank)
+          </button>
+          <button class="elegant-btn cancel-btn" (click)="cancelRenameConfirm()">
+            Cancel
+          </button>
+        </div>
       </div>
     </div>
 
