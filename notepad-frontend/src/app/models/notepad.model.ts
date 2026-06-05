@@ -28,6 +28,10 @@ export interface GenericResponse {
   message: string;
 }
 
+export interface PasswordResponse extends GenericResponse {
+  token: string | null;
+}
+
 export interface SaveNotepadResponse extends GenericResponse {
   characterCount: number;
   expiresAt: string;

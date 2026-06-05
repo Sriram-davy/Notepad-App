@@ -1,28 +1,58 @@
 <div class="page-container">
   <div class="page-content">
-    <button class="back-btn" (click)="nav.navigateToHome()">← Back to Home</button>
+    <button class="back-btn" (click)="nav.navigateBack()">
+      ← Back to {{ nav.getLastNotepad() ? 'Notepad' : 'Home' }}
+    </button>
     <div class="header">
       <h1>Terms of Service</h1>
+      <p class="last-updated font-mono">Last updated: May 2026</p>
     </div>
-    
+
     <div class="section">
       <h2>1. Acceptance of Terms</h2>
-      <p>By accessing and using SlashPad, you accept and agree to be bound by the terms and provision of this agreement.</p>
+      <p>By accessing and using SlashPad, you confirm that you have read, understood, and agree to be bound by these Terms of Service. If you do not agree to these terms, please refrain from using the service.</p>
     </div>
 
     <div class="section">
       <h2>2. Description of Service</h2>
-      <p>SlashPad provides users with a digital notepad for temporary or permanent text storage. We reserve the right to modify, suspend or discontinue the service at any time.</p>
+      <p>SlashPad is a path-based, privacy-first digital notepad. Any person who navigates to a unique URL path on SlashPad can create or access a notepad. Content is stored and optionally encrypted with end-to-end encryption at the user's discretion. We reserve the right to modify, suspend, or discontinue the service at any time with or without notice.</p>
     </div>
 
     <div class="section">
-      <h2>3. User Responsibilities</h2>
-      <p>You are responsible for any content you store on SlashPad. Do not use the service to store illegal, infringing, or malicious content. We reserve the right to delete any notepad that violates these terms.</p>
+      <h2>3. Path Ownership</h2>
+      <p>Notepad paths are not "owned" in a traditional sense — they are simply URL-based identifiers. SlashPad operates on a first-come, first-serve model. If you choose a path and optionally protect it with a password, that protection is the sole mechanism keeping others out. <strong>Choose a non-guessable path</strong> if privacy is important to you.</p>
     </div>
 
     <div class="section">
-      <h2>4. Data Deletion</h2>
-      <p>SlashPad is designed to be an ephemeral ledger. While we strive to maintain your data, inactive notepads may be subject to deletion after extended periods of inactivity. Please backup important information.</p>
+      <h2>4. Acceptable Use</h2>
+      <p>You agree not to use SlashPad to store, transmit, or share content that is:</p>
+      <ul>
+        <li>Illegal under applicable law.</li>
+        <li>Malicious, threatening, or designed to harm other individuals.</li>
+        <li>Infringing on the intellectual property rights of others.</li>
+        <li>Spam or automated machine-generated content.</li>
+      </ul>
+      <p>We reserve the right to delete any notepad that we reasonably determine violates these terms, without prior notice.</p>
+    </div>
+
+    <div class="section">
+      <h2>5. Passwords & Responsibility</h2>
+      <p>If you set a password on your notepad, you are solely responsible for remembering it. Due to the zero-knowledge architecture, <strong>lost passwords cannot be recovered by us</strong>. We cannot decrypt or restore a password-protected notepad on your behalf.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Data Retention & Expiry</h2>
+      <p>Notepads expire after a period of inactivity. Any save operation resets the expiry clock. Notepads that have not been saved within the expiry window may be permanently deleted. You are encouraged to export important notes using the built-in "Download as .txt" feature.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. Disclaimer of Warranties</h2>
+      <p>SlashPad is provided "as is" without warranties of any kind. While we take security seriously, we make no guarantees regarding uptime, data durability, or the absolute security of information stored on the platform. Use the encryption features for any sensitive content.</p>
+    </div>
+
+    <div class="section">
+      <h2>8. Limitation of Liability</h2>
+      <p>SlashPad and its creators shall not be liable for any loss or damage arising from your use of, or inability to use, the service — including data loss due to expiry, server failure, or user error.</p>
     </div>
   </div>
 </div>

@@ -1,28 +1,53 @@
 <div class="page-container">
   <div class="page-content">
-    <button class="back-btn" (click)="nav.navigateToHome()">← Back to Home</button>
+    <button class="back-btn" (click)="nav.navigateBack()">
+      ← Back to {{ nav.getLastNotepad() ? 'Notepad' : 'Home' }}
+    </button>
     <div class="header">
       <h1>Privacy Policy</h1>
-    </div>
-    
-    <div class="section">
-      <h2>1. Data Collection</h2>
-      <p>SlashPad collects only the text you enter into your notepads and the optional passwords you set. We do not track your IP address, browser information, or utilize tracking cookies.</p>
+      <p class="last-updated font-mono">Last updated: May 2026</p>
     </div>
 
     <div class="section">
-      <h2>2. How Data is Stored</h2>
-      <p>The text content of your notepads is currently stored in plain text on our servers. Please avoid storing highly sensitive or personally identifiable information (PII). Passwords are cryptographically hashed using BCrypt.</p>
+      <h2>1. Zero-Knowledge Architecture</h2>
+      <p>SlashPad is built on a zero-knowledge principle. When you protect a notepad with a password, your content is encrypted using AES-256-GCM <strong>in your browser</strong> before it is ever transmitted. The encryption key is derived from your password locally — we never see your password in plaintext, and we never see the decrypted content of a private notepad. Your secret is yours alone.</p>
     </div>
 
     <div class="section">
-      <h2>3. Data Security</h2>
-      <p>While we use HTTPS to secure data in transit, we do not employ end-to-end encryption. Private notepads rely on standard authentication to prevent unauthorized viewing. Do not use SlashPad for storing banking details or critical passwords.</p>
+      <h2>2. What We Collect</h2>
+      <p>SlashPad collects only what is necessary to provide the service:</p>
+      <ul>
+        <li>The <strong>URL path</strong> (e.g., <code>/your-name</code>) you use to identify your notepad.</li>
+        <li>The <strong>encrypted ciphertext</strong> of your content (for private notes) or the plain text (for public notes you have not password-protected).</li>
+        <li>An optional <strong>password hint</strong> you choose to set — this is stored as plain text so treat it as a non-secret reminder.</li>
+        <li>Timestamps for creation, last save, and expiry.</li>
+      </ul>
+      <p>We do <strong>not</strong> collect your IP address for identification, browser fingerprints, device information, or usage analytics.</p>
     </div>
 
     <div class="section">
-      <h2>4. Third-Party Sharing</h2>
-      <p>We will never sell, rent, or share your notepad data with third parties. Your data remains strictly within the SlashPad infrastructure.</p>
+      <h2>3. Cookies & Sessions</h2>
+      <p>SlashPad does not use cookies. Authentication tokens (JWTs) are held in your browser's memory only for the duration of your active session. They are <strong>never written to localStorage or cookies</strong> and are discarded the moment you close the tab or your session times out (5 minutes of inactivity).</p>
+    </div>
+
+    <div class="section">
+      <h2>4. Data Retention</h2>
+      <p>Notepads automatically expire after a period of inactivity. Once expired, the data is permanently removed from our servers. You can also permanently delete a notepad's content by writing an empty note and saving.</p>
+    </div>
+
+    <div class="section">
+      <h2>5. Third-Party Sharing</h2>
+      <p>We will never sell, rent, or share your notepad data with third parties. Your data remains strictly within the SlashPad infrastructure. We do not use any third-party analytics, advertising, or tracking services.</p>
+    </div>
+
+    <div class="section">
+      <h2>6. Sharing Links</h2>
+      <p>When you use the "Share a Read-Only Link" feature on a password-protected note, the decryption key is embedded <strong>only in the URL fragment</strong> (the <code>#...</code> portion after the URL). This fragment is never sent to our server by the browser. Only the person with the full share link can decrypt the content.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. Contact</h2>
+      <p>If you have any questions or concerns about how your data is handled, please reach out via the <span class="link" (click)="nav.navigateToSupport()">Support page</span>.</p>
     </div>
   </div>
 </div>

@@ -13,15 +13,13 @@ import { FormsModule } from '@angular/forms';
 export class HomeComponent {
   username = '';
 
-  constructor(private router: Router, public nav: NavigationService) { }
+  constructor(private router: Router, public nav: NavigationService) {
+    this.nav.clearLastNotepad();
+  }
 
   openNotepad() {
     if (this.username.trim()) {
       this.router.navigate([this.username.trim()]);
     }
-  }
-
-  toggleTheme() {
-    document.body.classList.toggle('dark-mode');
   }
 }

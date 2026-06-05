@@ -16,7 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -50,6 +49,22 @@ public class NotepadService {
         if (optionalNotepad.isPresent()) {
             notepad = optionalNotepad.get();
             verifyJwtAccess(notepad);
+
+            // Burn-after-read: if set and the reader is NOT the authenticated owner, wipe the content
+            if (Boolean.TRUE.equals(notepad.getBurnAfterRead())) {
+                String authUser = SecurityContextHolder.getContext().getAuthentication() != null ?
+                        SecurityContextHolder.getContext().getAuthentication().getName() : null;
+                boolean isOwner = normalizedUsername.equals(authUser);
+                if (!isOwner) {
+                    NotepadResponse response = buildNotepadResponse(notepad, true);
+                    // Wipe the note permanently
+                    notepad.setContent("");
+                    notepad.setBurnAfterRead(false);
+                    repository.save(notepad);
+                    logger.info("Burn-after-read triggered for notepad: {}", normalizedUsername);
+                    return response;
+                }
+            }
         } else {
             notepad = createNewNotepad(normalizedUsername);
         }
@@ -69,6 +84,10 @@ public class NotepadService {
         notepad.setContent(request.getContent());
         notepad.setUpdatedAt(LocalDateTime.now());
         notepad.setExpiresAt(LocalDateTime.now().plusDays(expiryDays));
+        notepad.setLastContentSavedAt(LocalDateTime.now()); // Track content saves separately from other updates
+        if (request.getBurnAfterRead() != null) {
+            notepad.setBurnAfterRead(request.getBurnAfterRead());
+        }
 
         notepad = repository.save(notepad);
 
@@ -97,11 +116,11 @@ public class NotepadService {
                     "Successfully verified"
             );
         } else {
-            throw new WrongPasswordException();
+            throw new WrongPasswordException(notepad.getPasswordHint());
         }
     }
 
-    public GenericResponse setPassword(String username, PasswordRequest request) {
+    public PasswordResponse setPassword(String username, PasswordRequest request) {
         String normalizedUsername = normalizeUsername(username);
         Notepad notepad = repository.findByUsernameIgnoreCase(normalizedUsername)
                 .orElseThrow(() -> new NotepadNotFoundException(normalizedUsername));
@@ -116,7 +135,8 @@ public class NotepadService {
 
         logger.info("Password set for notepad: {}", normalizedUsername);
 
-        return new GenericResponse(true, "Password set successfully");
+        String token = jwtUtils.generateToken(normalizedUsername);
+        return new PasswordResponse(true, "Password set successfully", token);
     }
 
     public GenericResponse removePassword(String username) {
@@ -160,7 +180,8 @@ public class NotepadService {
                 characterLimit,
                 notepad.getExpiresAt(),
                 (int) ChronoUnit.DAYS.between(LocalDateTime.now(), notepad.getExpiresAt()),
-                notepad.getUpdatedAt()
+                notepad.getLastContentSavedAt(), // Use dedicated content-save timestamp, not updatedAt
+                notepad.getBurnAfterRead()
         );
     }
 
@@ -183,8 +204,8 @@ public class NotepadService {
         }
         String authUser = SecurityContextHolder.getContext().getAuthentication() != null ? 
                 SecurityContextHolder.getContext().getAuthentication().getName() : null;
-        if (!notepad.getUsername().toLowerCase().equals(authUser)) {
-            throw new WrongPasswordException();
+        if (authUser == null || !notepad.getUsername().trim().equalsIgnoreCase(authUser.trim())) {
+            throw new WrongPasswordException(notepad.getPasswordHint());
         }
     }
 
@@ -192,8 +213,24 @@ public class NotepadService {
         return username.trim().toLowerCase();
     }
 
-    public List<Notepad> getAllNotepads(){
-        List<Notepad> allNotepads = repository.findAll();
-        return allNotepads;
+
+    // Public share endpoint: serves raw (possibly encrypted) content without JWT.
+    // Safe because E2EE content is an opaque blob; the decryption key lives only in the share URL fragment.
+    public NotepadResponse getShareView(String username) {
+        String normalizedUsername = normalizeUsername(username);
+        Notepad notepad = repository.findByUsernameIgnoreCase(normalizedUsername)
+                .orElseThrow(() -> new NotepadNotFoundException(normalizedUsername));
+
+        // Burn-after-read: wipe the note immediately and return what was there
+        if (Boolean.TRUE.equals(notepad.getBurnAfterRead())) {
+            NotepadResponse response = buildNotepadResponse(notepad, true);
+            notepad.setContent("");
+            notepad.setBurnAfterRead(false);
+            repository.save(notepad);
+            logger.info("Burn-after-read triggered via share endpoint for: {}", normalizedUsername);
+            return response;
+        }
+
+        return buildNotepadResponse(notepad, true);
     }
 }

@@ -1,5 +1,4 @@
-import { HostListener } from '@angular/core';
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { HostListener, Component, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -19,12 +18,14 @@ const IDLE_TIMEOUT_MS = 300000; // 5 minutes
   styleUrl: './notepad.component.scss'
 })
 export class NotepadComponent implements OnInit, OnDestroy {
+  @ViewChild('gutterRef') gutterRef?: ElementRef<HTMLDivElement>;
+  @ViewChild('textareaRef') textareaRef?: ElementRef<HTMLTextAreaElement>;
+
   // Idle timer state
   private idleTimer: any = null;
   idleWarning = false;
   private readonly idleWarningMs = IDLE_TIMEOUT_MS - 30000; // 30s before timeout
   private idleWarningTimer: any = null;
-  private destroy$ = new Subject<void>();
   notepad: NotepadResponse | null = null;
   content = '';
   passwordInput = '';
@@ -34,7 +35,6 @@ export class NotepadComponent implements OnInit, OnDestroy {
   isLoading = true;
   showToast = false;
   lastSaved: string | null = null;
-  isDarkMode = false;
   characterCount = 0;
   characterLimit = 50000;
   daysUntilExpiry = 10;
@@ -42,17 +42,29 @@ export class NotepadComponent implements OnInit, OnDestroy {
   private contentChange$ = new Subject<string>();
   private autoSaveSubscription?: Subscription;
   private timeAgoSubscription?: Subscription;
-  lastSavedText = 'ALL CHANGES SAVED';
+  lastSavedText = 'NOT YET SAVED';
+  showOptionsPanel = false;
+  shareToastMsg = '';
+  passwordHint = '';
+
+  // Breadcrumb / Rename / Recent Notes State
+  showBreadcrumbDropdown = false;
+  isEditingPath = false;
+  newPathInput = '';
+  showRenameConfirm = false;
+  pendingRenamePath = '';
+  recentPads: string[] = [];
+  activeUsername = '';
 
   get readingTimeEstimate(): string {
-    // Approx 200 words per minute, 5 characters per word = 1000 chars per minute.
     const minutes = Math.floor(this.characterCount / 1000);
     const seconds = Math.floor((this.characterCount % 1000) / (1000 / 60));
-
-    if (minutes === 0) {
-      return `${seconds}s`;
-    }
+    if (minutes === 0) return `${seconds}s`;
     return `${minutes}m ${seconds}s`;
+  }
+
+  get isReadOnly(): boolean {
+    return this.notepadService.isReadOnly;
   }
 
   constructor(
@@ -63,13 +75,37 @@ export class NotepadComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit() {
-    // Sync dark mode from body
-    this.isDarkMode = document.body.classList.contains('dark-mode');
-    const username = this.route.snapshot.paramMap.get('username');
-    if (username) {
-      this.loadNotepad(username);
-    }
-    // Auto save 2.5 seconds after the user stops typing
+    this.route.paramMap.subscribe(params => {
+      const username = params.get('username');
+      if (username) {
+        this.activeUsername = username;
+        this.isEditingPath = false;
+        this.showBreadcrumbDropdown = false;
+        this.showRenameConfirm = false;
+        this.loadRecentPads();
+        this.addRecentPad(username);
+        this.nav.setLastNotepad(username);
+
+        const fragment = window.location.hash.slice(1);
+        if (fragment.startsWith('share=') || fragment === 'readonly') {
+          this.notepadService.loadShareKey(username, fragment).then((ok) => {
+            if (ok) {
+              history.replaceState(null, '', window.location.pathname);
+              this.loadNotepadPublic(username);
+            } else {
+              this.notepadService.isReadOnly = false;
+              this.notepadService.clearReadOnlyKey(username);
+              this.loadNotepad(username);
+            }
+          });
+        } else {
+          this.notepadService.isReadOnly = false;
+          this.notepadService.clearReadOnlyKey(username);
+          this.loadNotepad(username);
+        }
+      }
+    });
+
     this.autoSaveSubscription = this.contentChange$.pipe(
       debounceTime(2500),
       switchMap(() => this.saveNotepad())
@@ -87,18 +123,11 @@ export class NotepadComponent implements OnInit, OnDestroy {
     if (this.timeAgoSubscription) {
       this.timeAgoSubscription.unsubscribe();
     }
-    // Cancel idle timer
-    if (this.idleTimer) {
-      clearTimeout(this.idleTimer);
-    }
-    if (this.idleWarningTimer) {
-      clearTimeout(this.idleWarningTimer);
-    }
-    this.destroy$.next();
-    this.destroy$.complete();
-    if (this.notepad && this.notepad.username) {
-      this.notepadService.removeToken(this.notepad.username);
-    }
+    this.clearIdleTimers();
+  }
+
+  navigateLogo() {
+    this.nav.navigateToHome();
   }
 
   // ── IDLE TIMER LOGIC ──────────────────────────────
@@ -141,23 +170,13 @@ export class NotepadComponent implements OnInit, OnDestroy {
   loadNotepad(username: string) {
     this.isLoading = true;
     this.notepadService.getNotepad(username).subscribe({
-      next: (response) => {
-        this.notepad = response;
-        this.characterCount = response.characterCount;
-        this.characterLimit = response.characterLimit;
-        this.daysUntilExpiry = response.daysUntilExpiry;
-        this.content = response.content || '';
-        this.lastSaved = response.lastSaved || null;
-        this.showPasswordPrompt = false;
-        this.isLoading = false;
-        this.updateLineNumbers();
-        this.updateLastSavedText();
-      },
+      next: (response) => this.applyNotepadResponse(response),
       error: (error) => {
         this.isLoading = false;
         if (error.message === 'AUTH_REQUIRED') {
           this.notepadService.removeToken(username);
           this.showPasswordPrompt = true;
+          this.passwordHint = (error as any).passwordHint || '';
         } else {
           console.error('Error loading notepad:', error);
         }
@@ -165,16 +184,39 @@ export class NotepadComponent implements OnInit, OnDestroy {
     });
   }
 
+  loadNotepadPublic(username: string) {
+    this.isLoading = true;
+    this.notepadService.getNotepadPublic(username).subscribe({
+      next: (response) => this.applyNotepadResponse(response),
+      error: (error) => {
+        this.isLoading = false;
+        console.error('Error loading shared notepad:', error);
+      }
+    });
+  }
+
+  private applyNotepadResponse(response: any) {
+    this.notepad = response;
+    this.characterCount = response.characterCount;
+    this.characterLimit = response.characterLimit;
+    this.daysUntilExpiry = response.daysUntilExpiry;
+    this.content = response.content || '';
+    this.lastSaved = response.lastSaved || null;
+    this.showPasswordPrompt = false;
+    this.isLoading = false;
+    this.updateLineNumbers();
+    this.updateLastSavedText();
+  }
+
   verifyPassword() {
-    const username = this.route.snapshot.paramMap.get('username');
-    if (!username) return;
+    if (!this.activeUsername) return;
 
     const request: VerifyPasswordRequest = { password: this.passwordInput };
-    this.notepadService.verifyPassword(username, request).subscribe({
+    this.notepadService.verifyPassword(this.activeUsername, request).subscribe({
       next: (response) => {
         if (response.token) {
-          this.notepadService.setToken(username, response.token);
-          this.loadNotepad(username);
+          this.notepadService.setToken(this.activeUsername, response.token);
+          this.loadNotepad(this.activeUsername);
         } else {
           this.passwordError = 'Incorrect password';
         }
@@ -196,11 +238,9 @@ export class NotepadComponent implements OnInit, OnDestroy {
   }
 
   private saveNotepad(): Observable<any> {
-    if (!this.notepad || this.showPasswordPrompt) return of(null);
+    if (!this.notepad || this.showPasswordPrompt || this.isReadOnly) return of(null);
 
-    const request: SaveNotepadRequest = {
-      content: this.content
-    };
+    const request: SaveNotepadRequest = { content: this.content };
 
     this.isSaving = true;
     this.updateLastSavedText();
@@ -209,12 +249,8 @@ export class NotepadComponent implements OnInit, OnDestroy {
         this.isSaving = false;
         this.lastSaved = new Date().toISOString();
         this.updateLastSavedText();
-        if (this.notepad) {
-          this.notepad.expiresAt = response.expiresAt;
-        }
+        if (this.notepad) this.notepad.expiresAt = response.expiresAt;
         this.daysUntilExpiry = Math.ceil((new Date(response.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
-
-        // Show Toast
         this.showToast = true;
         setTimeout(() => this.showToast = false, 3000);
       }),
@@ -224,25 +260,44 @@ export class NotepadComponent implements OnInit, OnDestroy {
         console.error('Error saving notepad:', error);
         return of(null);
       }),
-      finalize(() => {
-        this.isSaving = false;
-      })
+      finalize(() => { this.isSaving = false; })
     );
   }
 
-  togglePasswordSetup() {
-    if (this.notepad) {
-      this.router.navigate([this.notepad.username, 'setup']);
-    }
+  // ── OPTIONS PANEL ──────────────────────────────────────────────────────────
+  toggleOptionsPanel() {
+    this.showOptionsPanel = !this.showOptionsPanel;
   }
 
-  toggleTheme() {
-    this.isDarkMode = !this.isDarkMode;
-    if (this.isDarkMode) {
-      document.body.classList.add('dark-mode');
-    } else {
-      document.body.classList.remove('dark-mode');
+  togglePasswordSetup() {
+    if (this.notepad) this.router.navigate([this.notepad.username, 'setup']);
+  }
+
+  // ── SHARE ──────────────────────────────────────────────────────────────────
+  async shareNotepad() {
+    if (!this.notepad) return;
+    try {
+      const shareLink = await this.notepadService.generateShareLink(this.notepad.username);
+      await navigator.clipboard.writeText(shareLink);
+      this.shareToastMsg = this.notepad.isProtected
+        ? '🔐 Encrypted share link copied! The recipient can read but not edit.'
+        : '🔗 Link copied! Anyone with this link can view and edit this note.';
+    } catch (e) {
+      this.shareToastMsg = 'Could not copy to clipboard. Please copy the URL manually.';
     }
+    setTimeout(() => this.shareToastMsg = '', 4000);
+  }
+
+  // ── EXPORT ─────────────────────────────────────────────────────────────────
+  exportAsTxt() {
+    if (!this.notepad) return;
+    const blob = new Blob([this.content], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${this.notepad.username}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   }
 
   updateLineNumbers() {
@@ -267,17 +322,13 @@ export class NotepadComponent implements OnInit, OnDestroy {
     } else if (this.lastSaved) {
       this.lastSavedText = `LAST SAVED ${this.getTimeAgo(this.lastSaved).toUpperCase()}`;
     } else {
-      this.lastSavedText = 'ALL CHANGES SAVED';
+      this.lastSavedText = 'NOT YET SAVED';
     }
   }
 
   formatExpiryDate(dateString: string | undefined): string {
     if (!dateString) return '';
     return new Date(dateString).toLocaleDateString();
-  }
-
-  navigateLogo() {
-    this.router.navigate(['/']);
   }
 
   copyNotepadUrl() {
@@ -290,5 +341,138 @@ export class NotepadComponent implements OnInit, OnDestroy {
         setTimeout(() => { btn.innerHTML = original; }, 2000);
       }
     });
+  }
+
+  // ── BREADCRUMB / RECENT NOTE / RENAME LOGIC ────────────────────────────────
+  loadRecentPads() {
+    try {
+      const stored = localStorage.getItem('recent_pads');
+      this.recentPads = stored ? JSON.parse(stored) : [];
+    } catch (e) {
+      this.recentPads = [];
+    }
+  }
+
+  addRecentPad(username: string) {
+    if (!username) return;
+    const lower = username.toLowerCase().trim();
+    const reserved = ['terms', 'privacy', 'support', 'setup', 'not-found', 'home', 'api'];
+    if (reserved.includes(lower)) return;
+
+    this.loadRecentPads();
+    this.recentPads = this.recentPads.filter(p => p.toLowerCase().trim() !== lower);
+    this.recentPads.unshift(username);
+    if (this.recentPads.length > 5) {
+      this.recentPads = this.recentPads.slice(0, 5);
+    }
+    try {
+      localStorage.setItem('recent_pads', JSON.stringify(this.recentPads));
+    } catch (e) {}
+  }
+
+  toggleBreadcrumbDropdown(event: Event) {
+    event.stopPropagation();
+    this.showBreadcrumbDropdown = !this.showBreadcrumbDropdown;
+  }
+
+  closeBreadcrumbDropdown() {
+    this.showBreadcrumbDropdown = false;
+  }
+
+  startRename(event: Event) {
+    event.stopPropagation();
+    this.showBreadcrumbDropdown = false;
+    this.isEditingPath = true;
+    this.newPathInput = this.notepad ? this.notepad.username : '';
+    setTimeout(() => {
+      const inputEl = document.querySelector('.path-input') as HTMLInputElement;
+      if (inputEl) {
+        inputEl.focus();
+        inputEl.select();
+      }
+    });
+  }
+
+  cancelRename() {
+    this.isEditingPath = false;
+    this.newPathInput = '';
+  }
+
+  confirmRename() {
+    if (!this.isEditingPath) return;
+    const cleanPath = this.newPathInput.trim().toLowerCase();
+    if (!cleanPath) {
+      this.cancelRename();
+      return;
+    }
+    
+    const currentPath = this.notepad ? this.notepad.username.toLowerCase() : '';
+    if (cleanPath === currentPath) {
+      this.cancelRename();
+      return;
+    }
+
+    const reserved = ['terms', 'privacy', 'support', 'setup', 'not-found', 'home', 'api'];
+    if (reserved.includes(cleanPath) || !/^[a-zA-Z0-9_-]+$/.test(cleanPath)) {
+      alert('Invalid pad name. Use letters, numbers, hyphens, and underscores.');
+      this.cancelRename();
+      return;
+    }
+
+    this.isEditingPath = false;
+    this.pendingRenamePath = this.newPathInput.trim();
+    
+    if (this.content && this.content.trim().length > 0 && !this.isReadOnly) {
+      this.showRenameConfirm = true;
+    } else {
+      this.executeRename(false);
+    }
+  }
+
+  cancelRenameConfirm() {
+    this.showRenameConfirm = false;
+    this.pendingRenamePath = '';
+  }
+
+  executeRename(moveContent: boolean) {
+    this.showRenameConfirm = false;
+    const targetPath = this.pendingRenamePath;
+    this.pendingRenamePath = '';
+
+    if (moveContent) {
+      this.isSaving = true;
+      this.notepadService.saveNotepad(targetPath, { content: this.content }).subscribe({
+        next: () => {
+          this.isSaving = false;
+          this.router.navigate(['/', targetPath]);
+        },
+        error: (err) => {
+          this.isSaving = false;
+          console.error('Failed to move notepad content:', err);
+          alert('Could not move content to new pad. It might be password-protected or restricted.');
+        }
+      });
+    } else {
+      this.router.navigate(['/', targetPath]);
+    }
+  }
+
+  navigateToPad(username: string) {
+    this.showBreadcrumbDropdown = false;
+    this.router.navigate(['/', username]);
+  }
+
+  onTextareaScroll() {
+    if (this.gutterRef && this.textareaRef) {
+      this.gutterRef.nativeElement.scrollTop = this.textareaRef.nativeElement.scrollTop;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.breadcrumb-container')) {
+      this.showBreadcrumbDropdown = false;
+    }
   }
 }

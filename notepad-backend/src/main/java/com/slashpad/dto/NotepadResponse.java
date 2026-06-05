@@ -19,4 +19,5 @@ public class NotepadResponse {
     private LocalDateTime expiresAt;
     private Integer daysUntilExpiry;
     private LocalDateTime lastSaved;
+    private Boolean burnAfterRead;
 }

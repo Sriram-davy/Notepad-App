@@ -24,7 +24,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<GenericResponse> handleWrongPassword(WrongPasswordException ex) {
         logger.warn("Wrong password attempt");
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new GenericResponse(false, ex.getMessage()));
+                .body(new GenericResponse(false, ex.getMessage(), ex.getPasswordHint()));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
