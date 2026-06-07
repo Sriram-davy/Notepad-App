@@ -161,6 +161,7 @@ public class NotepadService {
         return new HealthResponse("UP", LocalDateTime.now());
     }
 
+
     private Notepad createNewNotepad(String username) {
         Notepad notepad = new Notepad();
         notepad.setUsername(username);

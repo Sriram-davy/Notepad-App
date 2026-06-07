@@ -75,6 +75,7 @@ public class NotepadController {
         return ResponseEntity.ok(response);
     }
 
+
     @GetMapping("/health")
     public ResponseEntity<HealthResponse> health() {
         logger.debug("GET health check request received");

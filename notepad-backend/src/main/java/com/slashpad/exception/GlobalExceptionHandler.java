@@ -20,6 +20,7 @@ public class GlobalExceptionHandler {
                 .body(new GenericResponse(false, ex.getMessage()));
     }
 
+
     @ExceptionHandler(WrongPasswordException.class)
     public ResponseEntity<GenericResponse> handleWrongPassword(WrongPasswordException ex) {
         logger.warn("Wrong password attempt");

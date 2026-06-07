@@ -197,10 +197,10 @@ export class NotepadComponent implements OnInit, OnDestroy {
 
   private applyNotepadResponse(response: any) {
     this.notepad = response;
-    this.characterCount = response.characterCount;
     this.characterLimit = response.characterLimit;
     this.daysUntilExpiry = response.daysUntilExpiry;
     this.content = response.content || '';
+    this.characterCount = this.content.length;
     this.lastSaved = response.lastSaved || null;
     this.showPasswordPrompt = false;
     this.isLoading = false;
