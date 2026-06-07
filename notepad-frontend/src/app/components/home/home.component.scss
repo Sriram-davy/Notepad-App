@@ -377,3 +377,16 @@
 .font-mono {
   font-family: 'JetBrains Mono', monospace;
 }
+
+.home-footer {
+  text-align: center;
+  padding: 2rem;
+  border-top: 1px solid var(--obsidian-border);
+  background: var(--obsidian-deep);
+  color: var(--ink-faint);
+  font-size: 0.65rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  user-select: none;
+  opacity: 0.6;
+}

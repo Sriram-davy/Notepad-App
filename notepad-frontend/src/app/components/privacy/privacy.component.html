@@ -9,20 +9,20 @@
     </div>
 
     <div class="section">
-      <h2>1. Zero-Knowledge Architecture</h2>
-      <p>SlashPad is built on a zero-knowledge principle. When you protect a notepad with a password, your content is encrypted using AES-256-GCM <strong>in your browser</strong> before it is ever transmitted. The encryption key is derived from your password locally — we never see your password in plaintext, and we never see the decrypted content of a private notepad. Your secret is yours alone.</p>
+      <h2>1. Security & Locking</h2>
+      <p>When you protect a notepad with a password, your note is locked using strong, modern encryption directly in your web browser. This means your text is scrambled before it is saved on our servers, and it can only be unlocked when your password is typed in. We never store your password in a readable format, keeping your notepad private and secure.</p>
     </div>
 
     <div class="section">
       <h2>2. What We Collect</h2>
-      <p>SlashPad collects only what is necessary to provide the service:</p>
+      <p>We collect only the minimum info needed to keep the service running:</p>
       <ul>
-        <li>The <strong>URL path</strong> (e.g., <code>/your-name</code>) you use to identify your notepad.</li>
-        <li>The <strong>encrypted ciphertext</strong> of your content (for private notes) or the plain text (for public notes you have not password-protected).</li>
-        <li>An optional <strong>password hint</strong> you choose to set — this is stored as plain text so treat it as a non-secret reminder.</li>
-        <li>Timestamps for creation, last save, and expiry.</li>
+        <li>The <strong>URL name</strong> (like <code>/my-notes</code>) of your notepad.</li>
+        <li>The <strong>scrambled note text</strong> (if password-locked) or the plain text (if unprotected).</li>
+        <li>An optional <strong>password hint</strong> to help you remember your password.</li>
+        <li>Simple timestamps showing when the note was created or saved.</li>
       </ul>
-      <p>We do <strong>not</strong> collect your IP address for identification, browser fingerprints, device information, or usage analytics.</p>
+      <p>We do not collect details like your computer info, IP address, or tracking data.</p>
     </div>
 
     <div class="section">
@@ -42,7 +42,7 @@
 
     <div class="section">
       <h2>6. Sharing Links</h2>
-      <p>When you use the "Share a Read-Only Link" feature on a password-protected note, the decryption key is embedded <strong>only in the URL fragment</strong> (the <code>#...</code> portion after the URL). This fragment is never sent to our server by the browser. Only the person with the full share link can decrypt the content.</p>
+      <p>If you create a read-only share link for a password-protected note, a special key is added to the link. This key allows the recipient's browser to open the note directly without requiring them to know or type your password. The key is kept private in the link itself and is not saved on our server.</p>
     </div>
 
     <div class="section">

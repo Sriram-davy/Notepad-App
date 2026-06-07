@@ -24,6 +24,11 @@ export class PasswordSetupComponent implements OnInit {
   isProtected = false;
   isChecking = true;
   activeTab: 'change' | 'remove' = 'change';
+  showConfirmModal = false;
+
+  get hasToken(): boolean {
+    return !!this.notepadService.getToken(this.username);
+  }
 
   constructor(
     private route: ActivatedRoute,
@@ -158,19 +163,26 @@ export class PasswordSetupComponent implements OnInit {
     }
   }
 
-  async removePassword() {
-    if (!confirm('Are you sure you want to remove the password? Anyone with the link will be able to access your notes.')) return;
-
-    console.log('[Password Setup] removePassword triggered. Username:', this.username);
+  removePassword() {
+    console.log('[Password Setup] removePassword dialog requested. Username:', this.username);
     this.error = '';
     this.success = '';
     
-    if (this.isProtected && !this.currentPassword && !this.notepadService.getToken(this.username)) {
+    if (this.isProtected && !this.currentPassword && !this.hasToken) {
       console.warn('[Password Setup] Blocked: current password required to remove.');
       this.error = 'Please enter your current password to remove it.';
       return;
     }
 
+    this.showConfirmModal = true;
+  }
+
+  cancelRemove() {
+    this.showConfirmModal = false;
+  }
+
+  async confirmRemove() {
+    this.showConfirmModal = false;
     this.isLoading = true;
 
     const authenticated = await this.ensureAuthenticated();
