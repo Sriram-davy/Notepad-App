@@ -25,7 +25,10 @@ export class NotepadService {
   // ── CRYPTO HELPERS ────────────────────────────────────────────────────────
 
   async processIncomingContent(username: string, content: string | null): Promise<string | null> {
-    if (!content || !content.startsWith('ENC:')) return content;
+    if (!content) return content;
+    
+    // Support legacy plaintext notes in database
+    if (!content.startsWith('ENC:')) return content;
 
     const parts = content.split(':');
     if (parts.length !== 4) return content;
@@ -34,33 +37,42 @@ export class NotepadService {
     const iv = this.crypto.base64ToBuffer(parts[2]);
     const ciphertext = this.crypto.base64ToBuffer(parts[3]);
 
+    // Check custom password first (from password setup / prompt)
     const pwd = this.passwords.get(username.toLowerCase());
-    if (!pwd) {
-      // Try to decrypt using a pre-loaded share key (no password needed)
+    if (pwd) {
+      try {
+        const key = await this.crypto.deriveKey(pwd, salt);
+        this.cryptoKeys.set(username.toLowerCase(), { key, salt });
+        return await this.crypto.decrypt(ciphertext.buffer as ArrayBuffer, iv, key);
+      } catch (e) {
+        console.error('Decryption with custom password failed', e);
+        return 'ERROR: Could not decrypt note. Password may be wrong or data corrupted.';
+      }
+    }
+
+    // Default: try decrypting using the notepad username itself (for unprotected notes)
+    try {
+      const key = await this.crypto.deriveKey(username.toLowerCase(), salt);
+      this.cryptoKeys.set(username.toLowerCase(), { key, salt });
+      return await this.crypto.decrypt(ciphertext.buffer as ArrayBuffer, iv, key);
+    } catch (e) {
+      // If decryption with username fails, it could be a password-protected note, 
+      // or we can try with shareKey if available
       const shareKey = this.cryptoKeys.get(username.toLowerCase());
       if (shareKey) {
         try {
           return await this.crypto.decrypt(ciphertext.buffer as ArrayBuffer, iv, shareKey.key);
-        } catch (e) {
-          return '[This note is encrypted — share link key mismatch]';
+        } catch (shareErr) {
+          // ignore
         }
       }
-      return content; // Cannot decrypt, return raw
-    }
-
-    try {
-      const key = await this.crypto.deriveKey(pwd, salt);
-      this.cryptoKeys.set(username.toLowerCase(), { key, salt });
-      return await this.crypto.decrypt(ciphertext.buffer as ArrayBuffer, iv, key);
-    } catch (e) {
-      console.error('Decryption failed', e);
-      return 'ERROR: Could not decrypt note. Password may be wrong or data corrupted.';
+      return content; // Return raw ciphertext (triggers password prompt in UI)
     }
   }
 
   async prepareOutgoingContent(username: string, content: string): Promise<string> {
-    const pwd = this.passwords.get(username.toLowerCase());
-    if (!pwd) return content;
+    // Default to using username as key if no custom password is set
+    const pwd = this.passwords.get(username.toLowerCase()) || username.toLowerCase();
 
     let cryptoData = this.cryptoKeys.get(username.toLowerCase());
     if (!cryptoData) {
@@ -215,6 +227,17 @@ export class NotepadService {
 
   removePassword(username: string): Observable<GenericResponse> {
     return this.http.delete<GenericResponse>(`${this.apiUrl}/${username}/password`).pipe(
+      tap(() => {
+        this.passwords.delete(username.toLowerCase());
+        this.cryptoKeys.delete(username.toLowerCase());
+        this.tokens.delete(username.toLowerCase());
+      }),
+      catchError((err) => this.handleError(err, false))
+    );
+  }
+
+  deleteNotepad(username: string): Observable<GenericResponse> {
+    return this.http.delete<GenericResponse>(`${this.apiUrl}/${username}`).pipe(
       tap(() => {
         this.passwords.delete(username.toLowerCase());
         this.cryptoKeys.delete(username.toLowerCase());

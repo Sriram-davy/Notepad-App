@@ -12,7 +12,6 @@ import java.time.LocalDateTime;
 public class VerifyPasswordResponse {
     private Boolean verified;
     private String content;
-    private LocalDateTime expiresAt;
     private String token;
     private String message;
 }

@@ -37,8 +37,8 @@ export class NotepadComponent implements OnInit, OnDestroy {
   lastSaved: string | null = null;
   characterCount = 0;
   characterLimit = 50000;
-  daysUntilExpiry = 10;
   lineNumbers: number[] = [];
+  showDeleteConfirm = false;
   private contentChange$ = new Subject<string>();
   private autoSaveSubscription?: Subscription;
   private timeAgoSubscription?: Subscription;
@@ -198,7 +198,6 @@ export class NotepadComponent implements OnInit, OnDestroy {
   private applyNotepadResponse(response: any) {
     this.notepad = response;
     this.characterLimit = response.characterLimit;
-    this.daysUntilExpiry = response.daysUntilExpiry;
     this.content = response.content || '';
     this.characterCount = this.content.length;
     this.lastSaved = response.lastSaved || null;
@@ -249,8 +248,6 @@ export class NotepadComponent implements OnInit, OnDestroy {
         this.isSaving = false;
         this.lastSaved = new Date().toISOString();
         this.updateLastSavedText();
-        if (this.notepad) this.notepad.expiresAt = response.expiresAt;
-        this.daysUntilExpiry = Math.ceil((new Date(response.expiresAt).getTime() - Date.now()) / (1000 * 60 * 60 * 24));
         this.showToast = true;
         setTimeout(() => this.showToast = false, 3000);
       }),
@@ -324,11 +321,6 @@ export class NotepadComponent implements OnInit, OnDestroy {
     } else {
       this.lastSavedText = 'NOT YET SAVED';
     }
-  }
-
-  formatExpiryDate(dateString: string | undefined): string {
-    if (!dateString) return '';
-    return new Date(dateString).toLocaleDateString();
   }
 
   copyNotepadUrl() {
@@ -455,6 +447,31 @@ export class NotepadComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/', targetPath]);
     }
+  }
+
+  requestDeleteNotepad() {
+    this.showOptionsPanel = false;
+    this.showDeleteConfirm = true;
+  }
+
+  cancelDeleteNotepad() {
+    this.showDeleteConfirm = false;
+  }
+
+  confirmDeleteNotepad() {
+    this.showDeleteConfirm = false;
+    this.isLoading = true;
+    this.notepadService.deleteNotepad(this.activeUsername).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Failed to delete notepad:', err);
+        alert('Could not permanently delete this notepad. Please try again.');
+      }
+    });
   }
 
   navigateToPad(username: string) {

@@ -200,6 +200,20 @@
         </div>
         <span class="material-symbols-outlined option-arrow">chevron_right</span>
       </div>
+
+      <!-- Option 5: Delete -->
+      <div class="option-card delete-option" (click)="requestDeleteNotepad()">
+        <div class="option-icon active-red">
+          <span class="material-symbols-outlined">delete</span>
+        </div>
+        <div class="option-text">
+          <span class="option-name text-red">Permanently Delete Note</span>
+          <span class="option-desc">
+            Irreversibly deletes this notepad and all its content from our servers.
+          </span>
+        </div>
+        <span class="material-symbols-outlined option-arrow">chevron_right</span>
+      </div>
     </aside>
 
     <!-- Footer -->
@@ -266,6 +280,24 @@
             Just Navigate (Start Blank)
           </button>
           <button class="elegant-btn cancel-btn" (click)="cancelRenameConfirm()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete confirmation modal -->
+    <div class="overlay" *ngIf="showDeleteConfirm">
+      <div class="password-modal rename-modal" style="border-left: 3px solid #ff4d4d;">
+        <h2 class="modal-title font-headline" style="color: #ff4d4d;">Delete Notepad?</h2>
+        <p class="modal-hint font-mono" style="margin-bottom: 0.5rem; color: var(--ink);">
+          Are you sure you want to permanently delete <strong>/{{ notepad?.username }}</strong>? This action cannot be undone.
+        </p>
+        <div class="rename-modal-buttons">
+          <button class="elegant-btn" style="background: #ff4d4d; border-color: #ff4d4d; color: white;" (click)="confirmDeleteNotepad()">
+            Permanently Delete
+          </button>
+          <button class="elegant-btn secondary-btn" (click)="cancelDeleteNotepad()">
             Cancel
           </button>
         </div>

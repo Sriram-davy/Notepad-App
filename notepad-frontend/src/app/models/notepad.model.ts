@@ -5,8 +5,6 @@ export interface NotepadResponse {
   passwordHint: string | null;
   characterCount: number;
   characterLimit: number;
-  expiresAt: string;
-  daysUntilExpiry: number;
   lastSaved: string | null;
 }
 
@@ -34,13 +32,11 @@ export interface PasswordResponse extends GenericResponse {
 
 export interface SaveNotepadResponse extends GenericResponse {
   characterCount: number;
-  expiresAt: string;
 }
 
 export interface VerifyPasswordResponse {
   verified: boolean;
   content: string | null;
-  expiresAt: string | null;
   token: string | null;
   message?: string;
 }
