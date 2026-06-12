@@ -6,14 +6,17 @@ Working application hosted on : https://slashpad.netlify.app/
 
 ## Features
 
-- Clean, minimalist UI with glassmorphism design
-- Path-based routing (/username)
-- Auto-save every 30 seconds
-- Password protection overlay
+- Clean, minimalist UI with premium glassmorphism design
+- Path-based routing (`/username`)
+- Smart auto-save (`debounceTime(2500)` after typing ceases)
+- Zero-knowledge client-side encryption and password protection
+- Global Theme System: supports multiple custom palettes (Obsidian Gold, Midnight Emerald, Crimson Noir, Arctic Slate, Parchment Light) with a fixed floating theme picker persisted in `localStorage`
 - Character count and limit warnings
-- Dark/light mode toggle
-- Mobile responsive
-- Monospace font for notepad
+- Viewport-locked, double-scrollbar-free layout with synchronized line numbering gutter
+- Dynamic state headers (Vault, Archive, Scratchpad)
+- Estimated reading time calculation
+- Mobile-first responsive grid layouts
+
 
 ## Setup
 
@@ -46,6 +49,7 @@ Deploy to Netlify:
 - `NotepadComponent` - Main notepad interface
 - `PasswordSetupComponent` - Password management
 - `PasswordPromptComponent` - Password entry overlay
+- `ThemePickerComponent` - Global floating theme selector with 3-stripe visual color preview swatches
 - `NotFoundComponent` - 404 page
 - `PrivacyComponent` - Data handling policy
 - `TermsComponent` - Conditions of use

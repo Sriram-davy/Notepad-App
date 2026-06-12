@@ -14,7 +14,12 @@ SlashPad is a highly private, ephemeral yet permanent digital ledger and notepad
 - **Package Manager:** NPM
 
 **Design System & Aesthetics:**
-- **Theme:** Premium Obsidian/Gold dark theme (`#141414` deep background, `#c9a84c` gold accents).
+- **Global Themes:** 5 custom palettes defined as CSS Custom Properties via `[data-theme]`:
+  - `Obsidian Gold` (Default luxury dark: background `#141414`, accent `#c9a84c`, ink `#e8e4dc`)
+  - `Midnight Emerald` (Hacker green: background `#0d1117`, accent `#3fb68b`, text `#ccd6f6`)
+  - `Crimson Noir` (Moody red: background `#110a0a`, accent `#e05c5c`, text `#f0e8e8`)
+  - `Arctic Slate` (Navy blue: background `#0f1923`, accent `#5b9bd5`, text `#dce8f5`)
+  - `Parchment Light` (Warm light paper: background `#faf7f0`, accent `#8b5e3c`, text `#2a1f14`)
 - **Typography:** 
   - `Newsreader` (Heading elegance)
   - `Inter` (UI elements, buttons)
@@ -41,10 +46,11 @@ SlashPad is a highly private, ephemeral yet permanent digital ledger and notepad
   - `NotepadComponent`: The core editor ledger
   - `PasswordSetupComponent`: End-to-end security key management
   - `PasswordPromptComponent`: Security challenge overlay
+  - `ThemePickerComponent`: Global fixed floating theme selector with 3-stripe color palette swatches, rotating chevrons, and active check indicators, loading preferences via `ThemeService`
   - `NotFoundComponent`: Standardized 404 handler
-  - `PrivacyComponent`: Data handling policy
-  - `TermsComponent`: Conditions of use
-  - `SupportComponent`: Help and contact information
+  - `PrivacyComponent`: Data handling policy (removed operator names, limits local storage purely to theme choice)
+  - `TermsComponent`: Conditions of use (removed operator names, simplified liability disclaimers)
+  - `SupportComponent`: Help and contact information (removed operator names, updated FAQs)
 
 **Security Flow (Frontend):**
 1. User navigates to `/:username` → `GET /api/notepad/{username}`

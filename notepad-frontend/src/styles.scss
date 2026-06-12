@@ -37,6 +37,15 @@
   /* Editor accent line */
   --editor-accent-border: rgba(201, 168, 76, 0.25);
 
+  /* Sidebar Buttons (default dark theme values) */
+  --sidebar-btn-bg:           rgba(36, 36, 36, 0.8);
+  --sidebar-btn-border:       var(--border);
+  --sidebar-btn-color:        var(--text-secondary);
+  --sidebar-btn-hover-bg:     rgba(var(--accent-rgb), 0.08);
+  --sidebar-btn-hover-border: var(--accent);
+  --sidebar-btn-hover-color:  var(--accent);
+  --sidebar-btn-hover-glow:   var(--accent-glow);
+
   /* Legacy aliases kept for backward compat */
   --obsidian:        #1c1c1c;
   --obsidian-deep:   #141414;
@@ -224,6 +233,15 @@
   --text-on-accent: #fdf8f0;
 
   --editor-accent-border: rgba(139, 94, 60, 0.22);
+
+  /* Sidebar Buttons (active warm bronze in parchment) */
+  --sidebar-btn-bg:           #8b5e3c;
+  --sidebar-btn-border:       #8b5e3c;
+  --sidebar-btn-color:        #faf7f0;
+  --sidebar-btn-hover-bg:     #a97040;
+  --sidebar-btn-hover-border: #a97040;
+  --sidebar-btn-hover-color:  #faf7f0;
+  --sidebar-btn-hover-glow:   rgba(139, 94, 60, 0.35);
 
   /* Legacy aliases */
   --obsidian:        #f2ece0;
