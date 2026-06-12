@@ -32,4 +32,7 @@ start-dev.bat
 # Local Instructions
 .clinerules
 .cursorrules
-.gemini-instructions.md
+.gemini-instructions.md
+
+# Local Artifacts (screenshots, recordings)
+Artifacts/

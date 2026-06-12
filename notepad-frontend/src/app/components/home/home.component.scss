@@ -2,8 +2,8 @@
   min-height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--obsidian-deep);
-  color: var(--ink);
+  background: var(--bg-deep);
+  color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   overflow-x: hidden;
   position: relative;
@@ -120,10 +120,10 @@
   display: flex;
   width: 100%;
   max-width: 580px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--border-light);
   border-radius: 4px;
   overflow: hidden;
-  background: rgba(20, 20, 20, 0.6);
+  background: var(--bg-input);
   backdrop-filter: blur(12px);
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -132,14 +132,14 @@
   align-items: stretch;
   
   &:hover {
-    border-color: rgba(201, 168, 76, 0.35);
-    box-shadow: 0 8px 32px rgba(201, 168, 76, 0.08);
+    border-color: rgba(var(--accent-rgb), 0.35);
+    box-shadow: 0 8px 32px rgba(var(--accent-rgb), 0.08);
   }
   
   &:focus-within {
-    border-color: var(--gold);
-    box-shadow: 0 8px 32px rgba(201, 168, 76, 0.22),
-                inset 0 0 12px rgba(201, 168, 76, 0.03);
+    border-color: var(--accent);
+    box-shadow: 0 8px 32px var(--accent-glow),
+                inset 0 0 12px rgba(var(--accent-rgb), 0.03);
   }
 }
 
@@ -154,18 +154,18 @@
 .url-prefix {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
-  color: #555;
+  color: var(--text-faint);
   white-space: nowrap;
   user-select: none;
   flex-shrink: 0;
   transition: color 0.3s ease;
 
   .url-input-row:hover & {
-    color: rgba(201, 168, 76, 0.5);
+    color: rgba(var(--accent-rgb), 0.5);
   }
 
   .url-input-row:focus-within & {
-    color: var(--gold);
+    color: var(--accent);
     opacity: 0.85;
   }
 }
@@ -177,18 +177,18 @@
   outline: none;
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.85rem;
-  color: var(--ink);
+  color: var(--text-primary);
   padding: 1.1rem 0.5rem;
-  caret-color: var(--gold);
+  caret-color: var(--accent);
   min-width: 0;
   
   &::placeholder {
-    color: #444;
+    color: var(--text-faint);
     transition: color 0.3s ease;
   }
 
   &:focus::placeholder {
-    color: #666;
+    color: var(--text-secondary);
   }
 }
 
@@ -197,8 +197,8 @@
   align-items: center;
   justify-content: center;
   align-self: stretch;
-  background: linear-gradient(135deg, #e5c060 0%, #c9a84c 100%);
-  color: #0c0c0b;
+  background: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent) 100%);
+  color: var(--text-on-accent);
   border: none;
   padding: 0 2rem;
   font-size: 0.85rem;
@@ -211,7 +211,7 @@
   border-radius: 0;
   position: relative;
   overflow: hidden;
-  box-shadow: 0 4px 16px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 4px 16px rgba(var(--accent-rgb), 0.15);
 
   /* Shining sweep effect overlay */
   &::after {
@@ -226,8 +226,8 @@
   }
   
   &:hover:not(:disabled) {
-    background: linear-gradient(135deg, #f3d47a 0%, #dca33c 100%);
-    box-shadow: 0 6px 24px rgba(201, 168, 76, 0.45);
+    background: linear-gradient(135deg, var(--accent-bright) 0%, var(--accent-dim) 100%);
+    box-shadow: 0 6px 24px rgba(var(--accent-rgb), 0.45);
     
     &::after {
       left: 130%;
@@ -240,9 +240,9 @@
   }
   
   &:disabled {
-    background: rgba(255, 255, 255, 0.03);
-    border-left: 1px solid rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.2);
+    background: var(--border-light);
+    border-left: 1px solid var(--border);
+    color: var(--text-faint);
     cursor: not-allowed;
     box-shadow: none;
     
@@ -276,8 +276,8 @@
 .bottom-cards-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  border-top: 1px solid var(--obsidian-border);
-  background: var(--obsidian-deep);
+  border-top: 1px solid var(--border);
+  background: var(--bg-deep);
   width: 100%;
   
   @media(max-width: 992px) {
@@ -290,7 +290,7 @@
 
 .feature-card {
   padding: 3.5rem 3rem;
-  border-right: 1px solid var(--obsidian-border);
+  border-right: 1px solid var(--border);
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -303,11 +303,11 @@
   }
   
   &:hover {
-    background: rgba(255, 255, 255, 0.01);
+    background: var(--bg-hover);
   }
   
   @media(max-width: 992px) {
-    border-bottom: 1px solid var(--obsidian-border);
+    border-bottom: 1px solid var(--border);
     
     &:nth-child(2n) {
       border-right: none;
@@ -315,7 +315,7 @@
   }
   @media(max-width: 576px) {
     border-right: none;
-    border-bottom: 1px solid var(--obsidian-border);
+    border-bottom: 1px solid var(--border);
     padding: 2.5rem 2rem;
     
     &:last-child {
@@ -327,12 +327,12 @@
 .card-icon-box {
   width: 38px;
   height: 38px;
-  border: 1px solid rgba(201, 168, 76, 0.2);
+  border: 1px solid rgba(var(--accent-rgb), 0.2);
   border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--gold);
+  color: var(--accent);
   flex-shrink: 0;
   
   .material-symbols-outlined {
@@ -343,13 +343,13 @@
 .card-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--ink);
+  color: var(--text-primary);
   margin: 0;
 }
 
 .card-description {
   font-size: 0.8rem;
-  color: var(--ink-muted);
+  color: var(--text-secondary);
   line-height: 1.6;
   margin: 0;
 }
@@ -362,11 +362,11 @@
   font-size: 0.6rem;
   font-weight: 700;
   letter-spacing: 0.05em;
-  background: rgba(201, 168, 76, 0.12);
-  color: var(--gold);
+  background: var(--accent-muted);
+  color: var(--accent);
   padding: 0.2rem 0.5rem;
   border-radius: 2px;
-  border: 1px solid rgba(201, 168, 76, 0.25);
+  border: 1px solid rgba(var(--accent-rgb), 0.25);
   
   @media (max-width: 576px) {
     top: 2.5rem;
@@ -381,9 +381,9 @@
 .home-footer {
   text-align: center;
   padding: 2rem;
-  border-top: 1px solid var(--obsidian-border);
-  background: var(--obsidian-deep);
-  color: var(--ink-faint);
+  border-top: 1px solid var(--border);
+  background: var(--bg-deep);
+  color: var(--text-faint);
   font-size: 0.65rem;
   letter-spacing: 0.15em;
   text-transform: uppercase;

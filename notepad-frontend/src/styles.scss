@@ -1,36 +1,287 @@
-/* Global styles */
-:root {
-  --obsidian: #1c1c1c;
-  --obsidian-deep: #141414;
-  --obsidian-surface: #242424;
+/* ════════════════════════════════════════════════════════════════
+   SLASHPAD — GLOBAL THEME SYSTEM
+   All themes defined here via CSS custom properties on [data-theme].
+   Swap data-theme on <html> to re-theme the entire app instantly.
+   ════════════════════════════════════════════════════════════════ */
+
+/* ── THEME 1: OBSIDIAN GOLD (default) ── */
+:root,
+[data-theme="obsidian-gold"] {
+  /* Backgrounds */
+  --bg-deep:        #141414;
+  --bg-surface:     #1c1c1c;
+  --bg-card:        #1a1917;
+  --bg-overlay:     rgba(20, 20, 20, 0.88);
+  --bg-input:       rgba(20, 20, 20, 0.6);
+  --bg-modal:       rgba(20, 20, 20, 0.92);
+  --bg-hover:       rgba(255, 255, 255, 0.01);
+
+  /* Borders */
+  --border:         #2e2e2e;
+  --border-light:   rgba(255, 255, 255, 0.08);
+
+  /* Accent */
+  --accent:         #c9a84c;
+  --accent-bright:  #e5c060;
+  --accent-dim:     #a8863a;
+  --accent-muted:   rgba(201, 168, 76, 0.15);
+  --accent-glow:    rgba(201, 168, 76, 0.22);
+  --accent-rgb:     201, 168, 76;
+
+  /* Text */
+  --text-primary:   #e8e4dc;
+  --text-secondary: #8a8478;
+  --text-faint:     #4a4842;
+  --text-on-accent: #0c0c0b;
+
+  /* Editor accent line */
+  --editor-accent-border: rgba(201, 168, 76, 0.25);
+
+  /* Legacy aliases kept for backward compat */
+  --obsidian:        #1c1c1c;
+  --obsidian-deep:   #141414;
+  --obsidian-surface:#242424;
   --obsidian-border: #2e2e2e;
-  --gold: #c9a84c;
-  --gold-dim: #a8863a;
-  --gold-muted: rgba(201,168,76,0.15);
-  --parchment: #f5f0e8;
-  --parchment-dim: #d4c9b0;
-  --ink: #e8e4dc;
-  --ink-muted: #8a8478;
-  --ink-faint: #4a4842;
-  --surface: var(--obsidian);
-  --on-surface: var(--ink);
-  --outline: var(--ink-muted);
-  --outline-variant: var(--ink-faint);
-  --primary: var(--gold);
+  --gold:            #c9a84c;
+  --gold-dim:        #a8863a;
+  --gold-muted:      rgba(201,168,76,0.15);
+  --parchment:       #f5f0e8;
+  --parchment-dim:   #d4c9b0;
+  --ink:             #e8e4dc;
+  --ink-muted:       #8a8478;
+  --ink-faint:       #4a4842;
+  --surface:         #1c1c1c;
+  --on-surface:      #e8e4dc;
+  --outline:         #8a8478;
+  --outline-variant: #4a4842;
+  --primary:         #c9a84c;
 }
 
+/* ── THEME 2: MIDNIGHT EMERALD ── */
+[data-theme="midnight-emerald"] {
+  --bg-deep:        #0d1117;
+  --bg-surface:     #161b22;
+  --bg-card:        #131920;
+  --bg-overlay:     rgba(13, 17, 23, 0.9);
+  --bg-input:       rgba(13, 17, 23, 0.65);
+  --bg-modal:       rgba(22, 27, 34, 0.95);
+  --bg-hover:       rgba(255, 255, 255, 0.02);
+
+  --border:         #21262d;
+  --border-light:   rgba(255, 255, 255, 0.07);
+
+  --accent:         #3fb68b;
+  --accent-bright:  #5fd4a8;
+  --accent-dim:     #2e8c6a;
+  --accent-muted:   rgba(63, 182, 139, 0.15);
+  --accent-glow:    rgba(63, 182, 139, 0.2);
+  --accent-rgb:     63, 182, 139;
+
+  --text-primary:   #ccd6f6;
+  --text-secondary: #7b8394;
+  --text-faint:     #3d4454;
+  --text-on-accent: #0a1a13;
+
+  --editor-accent-border: rgba(63, 182, 139, 0.22);
+
+  /* Legacy aliases */
+  --obsidian:        #161b22;
+  --obsidian-deep:   #0d1117;
+  --obsidian-surface:#1c2230;
+  --obsidian-border: #21262d;
+  --gold:            #3fb68b;
+  --gold-dim:        #2e8c6a;
+  --gold-muted:      rgba(63, 182, 139, 0.15);
+  --parchment:       #ccd6f6;
+  --parchment-dim:   #8ba0c4;
+  --ink:             #ccd6f6;
+  --ink-muted:       #7b8394;
+  --ink-faint:       #3d4454;
+  --surface:         #161b22;
+  --on-surface:      #ccd6f6;
+  --outline:         #7b8394;
+  --outline-variant: #3d4454;
+  --primary:         #3fb68b;
+}
+
+/* ── THEME 3: CRIMSON NOIR ── */
+[data-theme="crimson-noir"] {
+  --bg-deep:        #110a0a;
+  --bg-surface:     #1a1010;
+  --bg-card:        #170d0d;
+  --bg-overlay:     rgba(17, 10, 10, 0.9);
+  --bg-input:       rgba(17, 10, 10, 0.65);
+  --bg-modal:       rgba(26, 16, 16, 0.95);
+  --bg-hover:       rgba(255, 255, 255, 0.015);
+
+  --border:         #2d1a1a;
+  --border-light:   rgba(255, 255, 255, 0.06);
+
+  --accent:         #e05c5c;
+  --accent-bright:  #f07070;
+  --accent-dim:     #b84040;
+  --accent-muted:   rgba(224, 92, 92, 0.15);
+  --accent-glow:    rgba(224, 92, 92, 0.2);
+  --accent-rgb:     224, 92, 92;
+
+  --text-primary:   #f0e8e8;
+  --text-secondary: #8a7070;
+  --text-faint:     #4a3030;
+  --text-on-accent: #0f0505;
+
+  --editor-accent-border: rgba(224, 92, 92, 0.22);
+
+  /* Legacy aliases */
+  --obsidian:        #1a1010;
+  --obsidian-deep:   #110a0a;
+  --obsidian-surface:#221414;
+  --obsidian-border: #2d1a1a;
+  --gold:            #e05c5c;
+  --gold-dim:        #b84040;
+  --gold-muted:      rgba(224, 92, 92, 0.15);
+  --parchment:       #f0e8e8;
+  --parchment-dim:   #c4a8a8;
+  --ink:             #f0e8e8;
+  --ink-muted:       #8a7070;
+  --ink-faint:       #4a3030;
+  --surface:         #1a1010;
+  --on-surface:      #f0e8e8;
+  --outline:         #8a7070;
+  --outline-variant: #4a3030;
+  --primary:         #e05c5c;
+}
+
+/* ── THEME 4: ARCTIC SLATE ── */
+[data-theme="arctic-slate"] {
+  --bg-deep:        #0f1923;
+  --bg-surface:     #17232f;
+  --bg-card:        #14202b;
+  --bg-overlay:     rgba(15, 25, 35, 0.9);
+  --bg-input:       rgba(15, 25, 35, 0.65);
+  --bg-modal:       rgba(23, 35, 47, 0.95);
+  --bg-hover:       rgba(255, 255, 255, 0.015);
+
+  --border:         #1e3348;
+  --border-light:   rgba(255, 255, 255, 0.07);
+
+  --accent:         #5b9bd5;
+  --accent-bright:  #7ab4e8;
+  --accent-dim:     #3f7ab5;
+  --accent-muted:   rgba(91, 155, 213, 0.15);
+  --accent-glow:    rgba(91, 155, 213, 0.2);
+  --accent-rgb:     91, 155, 213;
+
+  --text-primary:   #dce8f5;
+  --text-secondary: #6e8ba8;
+  --text-faint:     #304558;
+  --text-on-accent: #071525;
+
+  --editor-accent-border: rgba(91, 155, 213, 0.22);
+
+  /* Legacy aliases */
+  --obsidian:        #17232f;
+  --obsidian-deep:   #0f1923;
+  --obsidian-surface:#1e2f40;
+  --obsidian-border: #1e3348;
+  --gold:            #5b9bd5;
+  --gold-dim:        #3f7ab5;
+  --gold-muted:      rgba(91, 155, 213, 0.15);
+  --parchment:       #dce8f5;
+  --parchment-dim:   #8aafc8;
+  --ink:             #dce8f5;
+  --ink-muted:       #6e8ba8;
+  --ink-faint:       #304558;
+  --surface:         #17232f;
+  --on-surface:      #dce8f5;
+  --outline:         #6e8ba8;
+  --outline-variant: #304558;
+  --primary:         #5b9bd5;
+}
+
+/* ── THEME 5: PARCHMENT LIGHT ── */
+[data-theme="parchment-light"] {
+  --bg-deep:        #faf7f0;
+  --bg-surface:     #f2ece0;
+  --bg-card:        #f7f3eb;
+  --bg-overlay:     rgba(242, 236, 224, 0.92);
+  --bg-input:       rgba(250, 247, 240, 0.8);
+  --bg-modal:       rgba(255, 253, 248, 0.97);
+  --bg-hover:       rgba(0, 0, 0, 0.02);
+
+  --border:         #d8cebc;
+  --border-light:   rgba(0, 0, 0, 0.08);
+
+  --accent:         #8b5e3c;
+  --accent-bright:  #a97040;
+  --accent-dim:     #6b4628;
+  --accent-muted:   rgba(139, 94, 60, 0.12);
+  --accent-glow:    rgba(139, 94, 60, 0.18);
+  --accent-rgb:     139, 94, 60;
+
+  --text-primary:   #2a1f14;
+  --text-secondary: #7a6a56;
+  --text-faint:     #bba88a;
+  --text-on-accent: #fdf8f0;
+
+  --editor-accent-border: rgba(139, 94, 60, 0.22);
+
+  /* Legacy aliases */
+  --obsidian:        #f2ece0;
+  --obsidian-deep:   #faf7f0;
+  --obsidian-surface:#e8e0d0;
+  --obsidian-border: #d8cebc;
+  --gold:            #8b5e3c;
+  --gold-dim:        #6b4628;
+  --gold-muted:      rgba(139, 94, 60, 0.12);
+  --parchment:       #2a1f14;
+  --parchment-dim:   #4a3a28;
+  --ink:             #2a1f14;
+  --ink-muted:       #7a6a56;
+  --ink-faint:       #bba88a;
+  --surface:         #f2ece0;
+  --on-surface:      #2a1f14;
+  --outline:         #7a6a56;
+  --outline-variant: #bba88a;
+  --primary:         #8b5e3c;
+}
+
+/* ════════════════════════════════════════
+   GLOBAL BASE STYLES
+   ════════════════════════════════════════ */
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
+html {
+  /* Smooth theme transitions on everything except layout properties */
+  --theme-transition: background-color 0.35s ease, color 0.35s ease,
+    border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
 body {
   font-family: 'Inter', sans-serif;
   min-height: 100vh;
-  background: var(--obsidian-deep);
-  color: var(--ink);
+  background: var(--bg-deep);
+  color: var(--text-primary);
   -webkit-font-smoothing: antialiased;
+  transition: var(--theme-transition);
+}
+
+/* Apply transition to all elements for smooth theme switching */
+*,
+*::before,
+*::after {
+  transition: background-color 0.35s ease, color 0.35s ease,
+    border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* But NOT layout / transform / opacity — these should remain instant */
+button, a, input, textarea {
+  transition: background-color 0.35s ease, color 0.35s ease,
+    border-color 0.35s ease, box-shadow 0.35s ease,
+    transform 0.2s ease, opacity 0.2s ease;
 }
 
 .app-container {
@@ -39,12 +290,7 @@ body {
   flex-direction: column;
 }
 
-/* Transitions */
-* {
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-}
-
-/* Monospace font for notepad */
+/* ── Global monospace textarea ── */
 .notepad-textarea {
   font-family: 'JetBrains Mono', monospace;
   font-size: 15px;
@@ -53,12 +299,12 @@ body {
   border: none;
   outline: none;
   background: transparent;
-  color: var(--ink);
+  color: var(--text-primary);
 }
 
-/* Responsive */
+/* ── Responsive ── */
 @media (max-width: 768px) {
   .notepad-textarea {
-    font-size: 16px; /* Prevent zoom on iOS */
+    font-size: 16px;
   }
 }
