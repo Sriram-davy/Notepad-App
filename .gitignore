@@ -24,3 +24,12 @@ target/
 
 # Secrets
 **/secrets.properties
+
+# Local Startup Scripts
+start-dev.ps1
+start-dev.bat
+
+# Local Instructions
+.clinerules
+.cursorrules
+.gemini-instructions.md
