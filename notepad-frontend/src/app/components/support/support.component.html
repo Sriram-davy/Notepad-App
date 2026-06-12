@@ -4,53 +4,63 @@
       ← Back to {{ nav.getLastNotepad() ? 'Notepad' : 'Home' }}
     </button>
     <div class="header">
-      <h1>Support & FAQ</h1>
-      <p class="last-updated font-mono">Answers to the most common questions</p>
+      <h1>Support &amp; FAQ</h1>
+      <p class="last-updated font-mono">Common questions, answered simply</p>
     </div>
 
     <div class="section">
       <h2>How do I create a notepad?</h2>
-      <p>Navigate to the SlashPad home page and type any word or phrase (e.g., <code>my-journal</code>, <code>sriramdavy</code>). Press Enter or click "Open Notepad." If no notepad exists at that path, one is instantly created for you. The path you choose <em>is</em> the notepad's address — keep it private or make it memorable.</p>
+      <p>Go to the SlashPad home page and type any word or phrase (e.g., <code>my-journal</code>, <code>work-notes</code>). Press Enter or click "Enter Sanctuary." A notepad at that path is instantly created. The path you choose <em>is</em> the notepad's address — keep it private or make it memorable.</p>
     </div>
 
     <div class="section">
       <h2>Does SlashPad auto-save?</h2>
-      <p>Yes. SlashPad auto-saves your content to the vault approximately 2.5 seconds after you stop typing. You can also click the <strong>Save Note</strong> button in the toolbar to save immediately. The status indicator in the toolbar shows when a save is in progress and when changes have been committed.</p>
+      <p>Yes. SlashPad saves your content automatically about 2.5 seconds after you stop typing. You can also click <strong>Save Note</strong> in the toolbar at any time. The status indicator shows when a save is in progress and when it's done.</p>
     </div>
 
     <div class="section">
       <h2>How do I password-protect my notepad?</h2>
-      <p>Click the <strong>OPTIONS</strong> button in the top toolbar, then select <strong>Password Protection</strong>. You will be taken to the settings page where you can set a password and an optional hint. Setting a password adds a secondary layer of encryption. While <em>all</em> notes on SlashPad are encrypted directly in your browser before being stored on our servers, password protection ensures that only someone who knows your custom password can unlock and read it.</p>
+      <p>Click <strong>OPTIONS</strong> in the top toolbar, then <strong>Password Protection</strong>. You can set a password and an optional hint. Your note is encrypted in your browser before anything is sent to our servers — we never see your password or your unencrypted content.</p>
     </div>
 
     <div class="section">
       <h2>What if I forget my password?</h2>
-      <p>If you forget your password, <strong>your note cannot be recovered</strong>. Because of our strict zero-knowledge security design, we never store your password or your plaintext note content on our servers, and we have no way to unlock your private notes for you. Please make sure to write down a helpful password hint and keep your password safe.</p>
+      <p>If you forget your password, <strong>your note cannot be recovered</strong>. We have no way to unlock it — your password never touches our servers. Use the password hint feature and keep your password somewhere safe.</p>
+    </div>
+
+    <div class="section">
+      <h2>Can I change the app theme?</h2>
+      <p>Yes! Click the <strong>Theme button</strong> in the bottom-right corner of any page. You can pick from five themes — Obsidian Gold, Midnight Emerald, Crimson Noir, Arctic Slate, and Parchment Light. Your choice is saved in your browser and remembered next time you visit. Theme preference is stored locally on your device only — never on our servers.</p>
     </div>
 
     <div class="section">
       <h2>How do I share my notepad?</h2>
-      <p>Click <strong>OPTIONS → Share a Read-Only Link</strong>. If your note is not password-protected, anyone with the link can view it (using the notepad name to decrypt it automatically). If it is password-protected, a special secure link is created that includes the decryption key. Anyone who uses this secure link can read the note without needing to type in the password, but they won't be able to edit it.</p>
+      <p>Click <strong>OPTIONS → Share a Read-Only Link</strong>. Anyone with the link can view your note but cannot edit it. For password-protected notes, a secure link is created that includes the decryption key — anyone who opens it can read the note without typing the password.</p>
     </div>
 
     <div class="section">
       <h2>How do I permanently delete my notepad?</h2>
-      <p>Click the <strong>OPTIONS</strong> button in the top toolbar, then select <strong>Permanently Delete Note</strong>. You will be prompted with a confirmation box. Once confirmed, the notepad record and all its scrambled content are permanently and irreversibly deleted from our database. Notes on SlashPad are kept permanently and do not automatically expire, so you should use the deletion option when you want to clear your data.</p>
+      <p>Click <strong>OPTIONS → Permanently Delete Note</strong> and confirm. The notepad and all its content are immediately and irreversibly deleted from our servers. There is no undo.</p>
     </div>
 
     <div class="section">
       <h2>How do I download my notes?</h2>
-      <p>Click <strong>OPTIONS → Download as Text File</strong> (or the <strong>EXPORT</strong> button in the toolbar). Your current note content will be downloaded as a <code>.txt</code> file named after your notepad path. This is your backup — use it regularly for important content.</p>
+      <p>Click <strong>EXPORT</strong> in the toolbar or <strong>OPTIONS → Download as Text File</strong>. Your note is downloaded as a <code>.txt</code> file. Keep local backups of anything important — we are not responsible for data loss.</p>
     </div>
 
     <div class="section">
       <h2>Why was I logged out automatically?</h2>
-      <p>SlashPad enforces a <strong>5-minute idle timeout</strong>. If your session is inactive for 5 minutes, you are returned to the home page. For password-protected notes, you will need to re-enter your password on the next visit. This ensures private sessions do not remain open unattended.</p>
+      <p>SlashPad has a <strong>5-minute idle timeout</strong>. After 5 minutes of inactivity, you're returned to the home page. For password-protected notes you'll need to re-enter your password. This keeps your session from staying open when you walk away.</p>
     </div>
 
     <div class="section">
-      <h2>Contact & Bugs</h2>
-      <p>Encountered a bug or have a feature request? Reach out at <strong>support&#64;slashpad.com</strong> or open an issue on the project's GitHub repository. We read every message and appreciate the feedback.</p>
+      <h2>Is my data private?</h2>
+      <p>Yes. We don't collect personal information, don't use cookies, and don't run any analytics or tracking. Your note content is encrypted before leaving your browser. See our <span class="link" (click)="nav.navigateToPrivacy()">Privacy Policy</span> for full details.</p>
+    </div>
+
+    <div class="section">
+      <h2>Contact &amp; Bugs</h2>
+      <p>Encountered a bug or have a suggestion? Reach out at <strong>support&#64;slashpad.com</strong>. We read every message.</p>
     </div>
   </div>
 </div>

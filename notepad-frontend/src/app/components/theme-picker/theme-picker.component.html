@@ -1,0 +1,78 @@
+<div class="theme-picker-wrapper">
+
+  <!-- ══ PREMIUM TRIGGER BUTTON ══ -->
+  <button
+    class="theme-trigger"
+    (click)="toggleOpen()"
+    [class.is-open]="isOpen"
+    id="theme-picker-trigger"
+    aria-label="Open theme picker"
+    [title]="'Active theme: ' + (activeTheme?.label || 'Default')"
+  >
+
+    <!-- 3-stripe palette preview showing the actual theme colors -->
+    <div
+      class="palette-swatch"
+      [class.light-swatch]="activeTheme?.isLight"
+    >
+      <div class="swatch-stripe" [style.background]="activeTheme?.previewBg"></div>
+      <div class="swatch-stripe accent-stripe" [style.background]="activeTheme?.previewAccent"></div>
+      <div class="swatch-stripe" [style.background]="activeTheme?.previewText" style="opacity:0.85"></div>
+    </div>
+
+    <!-- Theme label group -->
+    <div class="trigger-text">
+      <span class="trigger-kicker">THEME</span>
+      <span class="trigger-name">{{ activeTheme?.label || 'Obsidian Gold' }}</span>
+    </div>
+
+    <!-- Chevron icon -->
+    <span class="material-symbols-outlined trigger-chevron" [class.rotated]="isOpen">
+      expand_less
+    </span>
+
+  </button>
+
+  <!-- ══ THEME PANEL ══ -->
+  <div class="theme-panel" *ngIf="isOpen" role="dialog" aria-label="Theme selector">
+    <div class="panel-header">
+      <span class="panel-title">Choose Theme</span>
+      <button class="panel-close" (click)="isOpen = false" aria-label="Close">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+
+    <div class="theme-list">
+      <button
+        class="theme-item"
+        *ngFor="let theme of themes"
+        [class.active]="activeThemeId === theme.id"
+        [class.light-theme]="theme.isLight"
+        (click)="selectTheme(theme.id)"
+        [id]="'theme-' + theme.id"
+        [attr.aria-label]="theme.label"
+      >
+        <!-- Color preview card -->
+        <div class="color-preview" [style.background]="theme.previewBg">
+          <div class="preview-accent-bar" [style.background]="theme.previewAccent"></div>
+          <div class="preview-text-lines">
+            <div class="preview-line" [style.background]="theme.previewText" style="width: 60%; opacity: 0.8;"></div>
+            <div class="preview-line" [style.background]="theme.previewText" style="width: 40%; opacity: 0.5; margin-top: 4px;"></div>
+          </div>
+        </div>
+
+        <!-- Info -->
+        <div class="theme-info">
+          <span class="theme-name">{{ theme.label }}</span>
+          <span class="theme-desc">{{ theme.description }}</span>
+        </div>
+
+        <!-- Active indicator -->
+        <span class="active-check material-symbols-outlined" *ngIf="activeThemeId === theme.id">
+          check_circle
+        </span>
+      </button>
+    </div>
+  </div>
+
+</div>

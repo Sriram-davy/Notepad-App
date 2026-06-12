@@ -3,8 +3,8 @@
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: var(--obsidian-deep);
-  color: var(--ink);
+  background: var(--bg-deep);
+  color: var(--text-primary);
   font-family: 'Inter', sans-serif;
   position: relative;
   overflow: hidden;
@@ -107,9 +107,9 @@
   align-items: center;
   padding: 0 4rem;
   height: 64px;
-  background: rgba(20, 20, 20, 0.85);
+  background: var(--bg-overlay);
   backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--obsidian-border);
+  border-bottom: 1px solid var(--border);
   box-sizing: border-box;
   z-index: 100;
 }
@@ -200,9 +200,9 @@
   top: calc(100% + 8px);
   left: 0;
   width: 240px;
-  background: rgba(26, 25, 23, 0.95);
+  background: var(--bg-modal);
   backdrop-filter: blur(16px);
-  border: 1px solid var(--obsidian-border);
+  border: 1px solid var(--border);
   border-radius: 4px;
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.6);
   z-index: 200;
@@ -562,12 +562,12 @@
 .editor-card {
   flex: 1;
   display: flex;
-  flex-direction: row; /* Layout gutter and textarea side-by-side */
-  background: #1a1917;
-  border: 1px solid var(--obsidian-border);
-  border-left: 3px solid rgba(201, 168, 76, 0.25);
+  flex-direction: row;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--editor-accent-border);
   border-radius: 6px;
-  padding: 1.75rem 0; /* Padding top/bottom on card, horizontal padding on child elements */
+  padding: 1.75rem 0;
   box-shadow: 0 12px 48px rgba(0, 0, 0, 0.4);
   transition: border-color 0.3s ease, border-left-color 0.3s ease, box-shadow 0.3s ease;
   position: relative;
@@ -575,14 +575,14 @@
   min-height: 0;
 
   &:hover {
-    border-color: rgba(201, 168, 76, 0.2);
+    border-color: rgba(var(--accent-rgb), 0.2);
   }
   
   &:focus-within {
-    border-color: var(--gold);
-    border-left-color: var(--gold);
+    border-color: var(--accent);
+    border-left-color: var(--accent);
     box-shadow: 0 16px 64px rgba(0, 0, 0, 0.55), 
-                0 0 24px rgba(201, 168, 76, 0.08);
+                0 0 24px rgba(var(--accent-rgb), 0.08);
   }
 }
 
@@ -709,9 +709,9 @@
   flex-shrink: 0;
   position: relative;
   height: 52px;
-  background: rgba(20, 20, 20, 0.85);
+  background: var(--bg-overlay);
   backdrop-filter: blur(12px);
-  border-top: 1px solid var(--obsidian-border);
+  border-top: 1px solid var(--border);
   z-index: 100;
   display: flex;
   align-items: center;
@@ -798,10 +798,10 @@
 }
 
 .password-modal {
-  background: rgba(36, 36, 36, 0.9);
+  background: var(--bg-modal);
   backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 32px rgba(201, 168, 76, 0.05);
+  border: 1px solid var(--border-light);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.7), 0 0 32px rgba(var(--accent-rgb), 0.05);
   padding: 3rem 2.5rem;
   width: 100%;
   max-width: 25rem;
@@ -853,9 +853,9 @@
 .elegant-input::placeholder { color: var(--ink-faint); }
 
 .elegant-btn {
-  background: var(--gold);
-  color: var(--obsidian-deep);
-  border: 1px solid var(--gold);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  border: 1px solid var(--accent);
   padding: 0.9rem;
   font-family: 'Inter', sans-serif;
   font-size: 0.85rem;
@@ -864,16 +864,16 @@
   text-transform: uppercase;
   border-radius: 3px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.15);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   width: 100%;
   text-align: center;
 
   &:hover {
-    background: var(--gold-dim);
-    border-color: var(--gold-dim);
+    background: var(--accent-dim);
+    border-color: var(--accent-dim);
     transform: translateY(-1px);
-    box-shadow: 0 6px 16px rgba(201, 168, 76, 0.3);
+    box-shadow: 0 6px 16px rgba(var(--accent-rgb), 0.3);
   }
   
   &:active {
@@ -961,9 +961,9 @@
   height: 100vh;
   width: 380px;
   max-width: 95vw;
-  background: rgba(36, 36, 36, 0.92);
+  background: var(--bg-modal);
   backdrop-filter: blur(16px);
-  border-left: 1px solid var(--obsidian-border);
+  border-left: 1px solid var(--border);
   z-index: 500;
   display: flex;
   flex-direction: column;
@@ -982,10 +982,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 1.5rem 1rem;
-  border-bottom: 1px solid var(--obsidian-border);
+  border-bottom: 1px solid var(--border);
   position: sticky;
   top: 0;
-  background: rgba(36, 36, 36, 0.95);
+  background: var(--bg-overlay);
   z-index: 1;
 }
 
@@ -1016,12 +1016,12 @@
   align-items: flex-start;
   gap: 1rem;
   padding: 1.25rem 1.5rem;
-  border-bottom: 1px solid var(--obsidian-border);
+  border-bottom: 1px solid var(--border);
   cursor: pointer;
   transition: background 0.2s ease;
 
   &:hover {
-    background: rgba(201, 168, 76, 0.03);
+    background: rgba(var(--accent-rgb), 0.03);
   }
 
   &:last-child { border-bottom: none; }
@@ -1031,22 +1031,22 @@
   width: 36px;
   height: 36px;
   border-radius: 6px;
-  background: rgba(255, 255, 255, 0.02);
-  border: 1px solid var(--obsidian-border);
+  background: var(--bg-hover);
+  border: 1px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  color: var(--ink-muted);
+  color: var(--text-secondary);
 
   .material-symbols-outlined { font-size: 1.1rem; }
 
   &.active {
-    border-color: rgba(201, 168, 76, 0.4);
-    background: rgba(201, 168, 76, 0.1);
-    color: var(--gold);
-    box-shadow: 0 0 10px rgba(201, 168, 76, 0.1);
+    border-color: rgba(var(--accent-rgb), 0.4);
+    background: var(--accent-muted);
+    color: var(--accent);
+    box-shadow: 0 0 10px rgba(var(--accent-rgb), 0.1);
   }
   &.active-blue {
     border-color: rgba(100, 160, 255, 0.3);
@@ -1087,15 +1087,15 @@
   letter-spacing: 0.1em;
   padding: 0.2rem 0.5rem;
   border-radius: 2px;
-  background: var(--obsidian-border);
-  color: var(--ink-muted);
+  background: var(--border);
+  color: var(--text-secondary);
   align-self: center;
   flex-shrink: 0;
 
   &.on {
-    background: rgba(201, 168, 76, 0.12);
-    color: var(--gold);
-    border: 1px solid rgba(201, 168, 76, 0.3);
+    background: var(--accent-muted);
+    color: var(--accent);
+    border: 1px solid rgba(var(--accent-rgb), 0.3);
   }
 }
 
