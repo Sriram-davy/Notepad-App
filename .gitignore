@@ -20,5 +20,7 @@ target/
 # Env
 .env
 
+.application.properties
+
 # Secrets
 **/secrets.properties
