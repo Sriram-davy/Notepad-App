@@ -5,49 +5,115 @@
     </button>
     <div class="header">
       <h1>Privacy Policy</h1>
-      <p class="last-updated font-mono">Last updated: May 2026</p>
+      <p class="last-updated font-mono">Last updated: June 2026 | Effective immediately upon access</p>
+    </div>
+
+    <div class="intro-section" style="margin-bottom: 2rem; opacity: 0.85; line-height: 1.6;">
+      <p>This Privacy Policy describes how SlashPad ("the Service", "we", "us") collects, uses, stores, and protects information in connection with your use of the Service. By using SlashPad, you consent to the practices described in this Policy.</p>
     </div>
 
     <div class="section">
-      <h2>1. Security & Locking</h2>
-      <p>When you protect a notepad with a password, your note is locked using strong, modern encryption directly in your web browser. This means your text is scrambled before it is saved on our servers, and it can only be unlocked when your password is typed in. We never store your password in a readable format, keeping your notepad private and secure.</p>
+      <h2>1. Who We Are</h2>
+      <p>SlashPad is an independently operated online notepad service. References to "we", "us", or "our" refer to the Operator of SlashPad. This Service is not affiliated with any corporate entity, and is operated by Sriram Davuluri.</p>
     </div>
 
     <div class="section">
-      <h2>2. What We Collect</h2>
-      <p>We collect only the minimum info needed to keep the service running:</p>
+      <h2>2. Information We Collect</h2>
+      <p>We collect only the minimum information necessary to operate the Service:</p>
       <ul>
-        <li>The <strong>URL name</strong> (like <code>/my-notes</code>) of your notepad.</li>
-        <li>The <strong>scrambled note text</strong> (if password-locked) or the plain text (if unprotected).</li>
-        <li>An optional <strong>password hint</strong> to help you remember your password.</li>
-        <li>Simple timestamps showing when the note was created or saved.</li>
+        <li><strong>URL path identifier:</strong> The name you choose for your notepad (e.g. <code>/my-notes</code>). This is stored as a key to retrieve your note.</li>
+        <li><strong>Note content:</strong> If unprotected, your note is stored as plain text. If password-protected, your note is encrypted client-side in your browser before transmission — we receive and store only the encrypted ciphertext and never your plaintext content or password.</li>
+        <li><strong>Optional password hint:</strong> If provided, stored to assist you in remembering your password.</li>
+        <li><strong>Timestamps:</strong> Creation and last-saved timestamps for expiry management.</li>
       </ul>
-      <p>We do not collect details like your computer info, IP address, or tracking data.</p>
+      <p>We do NOT collect: your name, email address, IP address, device information, browser fingerprint, location data, or any form of personally identifiable information. We do not use cookies, tracking pixels, or analytics services of any kind.</p>
     </div>
 
     <div class="section">
-      <h2>3. Cookies & Sessions</h2>
-      <p>SlashPad does not use cookies. Authentication tokens (JWTs) are held in your browser's memory only for the duration of your active session. They are <strong>never written to localStorage or cookies</strong> and are discarded the moment you close the tab or your session times out (5 minutes of inactivity).</p>
+      <h2>3. How We Use Information</h2>
+      <p>The information we collect is used solely to:</p>
+      <ul>
+        <li>Store and retrieve your notepad content when you visit your URL</li>
+        <li>Manage note expiry and automatic deletion after inactivity</li>
+        <li>Operate and maintain the technical infrastructure of the Service</li>
+      </ul>
+      <p>We do not use your data for advertising, profiling, analytics, or any commercial purpose.</p>
     </div>
 
     <div class="section">
-      <h2>4. Data Retention</h2>
-      <p>Notepads automatically expire after a period of inactivity. Once expired, the data is permanently removed from our servers. You can also permanently delete a notepad's content by writing an empty note and saving.</p>
+      <h2>4. Encryption & Password Protection</h2>
+      <p>When you choose to protect a note with a password, encryption is performed entirely within your web browser before any data is sent to our servers. This means:</p>
+      <ul>
+        <li>We never receive or store your password in any form</li>
+        <li>We never receive or store your unencrypted note content</li>
+        <li>We cannot read, access, or recover your protected notes</li>
+        <li>Lost passwords cannot be recovered — there is no password reset mechanism</li>
+      </ul>
+      <p>The encryption key is derived from your password using modern, strong cryptographic standards. The security of your protected note depends entirely on the strength and confidentiality of the password you choose.</p>
     </div>
 
     <div class="section">
-      <h2>5. Third-Party Sharing</h2>
-      <p>We will never sell, rent, or share your notepad data with third parties. Your data remains strictly within the SlashPad infrastructure. We do not use any third-party analytics, advertising, or tracking services.</p>
+      <h2>5. Data Retention & Expiry</h2>
+      <p>Notepads automatically expire and are permanently deleted from our servers after a period of inactivity. Any save action resets the expiry clock. Once a notepad expires, the data is irrecoverably deleted. We strongly recommend using the built-in Download as .txt feature to keep local copies of important notes. We are not responsible for data loss due to expiry.</p>
     </div>
 
     <div class="section">
-      <h2>6. Sharing Links</h2>
-      <p>If you create a read-only share link for a password-protected note, a special key is added to the link. This key allows the recipient's browser to open the note directly without requiring them to know or type your password. The key is kept private in the link itself and is not saved on our server.</p>
+      <h2>6. No Third-Party Sharing</h2>
+      <p>We will never sell, rent, lease, trade, or share your notepad data with any third party for any commercial purpose. Your data remains strictly within SlashPad's infrastructure. We do not integrate with any third-party analytics, advertising, tracking, or data brokering services.</p>
+      <p>We may disclose information only in the following limited circumstances:</p>
+      <ul>
+        <li>If required by applicable law, court order, or lawful government authority</li>
+        <li>To protect the rights, property, or safety of the Operator, users of the Service, or the public</li>
+      </ul>
+      <p>In such cases, we will disclose only the minimum information necessary to satisfy the legal requirement.</p>
     </div>
 
     <div class="section">
-      <h2>7. Contact</h2>
-      <p>If you have any questions or concerns about how your data is handled, please reach out via the <span class="link" (click)="nav.navigateToSupport()">Support page</span>.</p>
+      <h2>7. Security Measures</h2>
+      <p>We take reasonable technical and organisational measures to protect data stored on the Service. However, no method of transmission over the internet or electronic storage is 100% secure. We cannot guarantee absolute security and disclaim liability for any breach, exposure, or unauthorised access to unprotected notes stored under guessable URL paths.</p>
+      <p>You are responsible for selecting a non-guessable URL path and using password protection for any sensitive content.</p>
+    </div>
+
+    <div class="section">
+      <h2>8. Read-Only Share Links</h2>
+      <p>If you generate a read-only share link for a password-protected note, a decryption key is embedded within the link itself. This key is not stored on our servers. The recipient's browser uses the key from the link to decrypt and display the note. Sharing this link grants the recipient read access to your note. We are not responsible for any unintended disclosure resulting from your sharing of such links.</p>
+    </div>
+
+    <div class="section">
+      <h2>9. Sessions & Cookies</h2>
+      <p>SlashPad does not use cookies. Any authentication tokens (JWTs) generated during your session are held in browser memory only for the duration of your active session. They are never written to localStorage, sessionStorage, or cookies, and are discarded automatically when you close the tab or after 5 minutes of inactivity. We do not track users across sessions.</p>
+    </div>
+
+    <div class="section">
+      <h2>10. Children's Privacy</h2>
+      <p>The Service is not directed at children under the age of 13. We do not knowingly collect any information from children under 13. If you believe a child under 13 has used the Service in a way that has resulted in information being stored, please contact us and we will take steps to delete such information.</p>
+    </div>
+
+    <div class="section">
+      <h2>11. International Users</h2>
+      <p>SlashPad is operated from India. If you access the Service from outside India, including from the European Union or United Kingdom, you acknowledge that your data (limited to what is described above) may be processed and stored in India. Users in the EU/UK should be aware that this may involve transfer of data to a jurisdiction with different data protection standards than your own. By using the Service, you consent to this transfer.</p>
+      <p>For EU users: Given that we collect no personally identifiable information, IP addresses, or tracking data, our data processing activities are minimal and we do not believe we act as a "data controller" of personal data under GDPR. If you have concerns, please contact us.</p>
+    </div>
+
+    <div class="section">
+      <h2>12. Your Rights</h2>
+      <p>Since we do not collect personally identifiable information and cannot link stored note content to any individual, we are limited in our ability to respond to data subject requests. However:</p>
+      <ul>
+        <li>You can permanently delete your note content at any time by saving an empty note</li>
+        <li>You can export your note content at any time using the Download feature</li>
+        <li>Notes are automatically deleted upon expiry</li>
+      </ul>
+      <p>If you have specific privacy concerns, please contact us via the <span class="link" (click)="nav.navigateToSupport()">Support page</span>.</p>
+    </div>
+
+    <div class="section">
+      <h2>13. Changes to This Policy</h2>
+      <p>We reserve the right to update this Privacy Policy at any time. We will indicate the revised date at the top of this document. Your continued use of the Service after any changes constitutes your acceptance of the updated Policy. We encourage you to review this Policy periodically.</p>
+    </div>
+
+    <div class="section">
+      <h2>14. Contact</h2>
+      <p>If you have any questions, concerns, or requests relating to this Privacy Policy, please reach out via the <span class="link" (click)="nav.navigateToSupport()">Support page</span> on SlashPad.</p>
     </div>
   </div>
 </div>

@@ -16,8 +16,6 @@ public class NotepadResponse {
     private String passwordHint;
     private Integer characterCount;
     private Integer characterLimit = 50000;
-    private LocalDateTime expiresAt;
-    private Integer daysUntilExpiry;
     private LocalDateTime lastSaved;
     private Boolean burnAfterRead;
 }

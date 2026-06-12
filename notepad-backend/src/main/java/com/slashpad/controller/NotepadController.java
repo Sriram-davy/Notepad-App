@@ -75,6 +75,15 @@ public class NotepadController {
         return ResponseEntity.ok(response);
     }
 
+    @DeleteMapping("/{username}")
+    public ResponseEntity<GenericResponse> deleteNotepad(
+            @PathVariable String username) {
+        logger.info("DELETE request received to permanently delete notepad for username: [{}]", username);
+        GenericResponse response = service.deleteNotepad(username);
+        logger.info("Successfully deleted notepad for username: [{}]", username);
+        return ResponseEntity.ok(response);
+    }
+
 
     @GetMapping("/health")
     public ResponseEntity<HealthResponse> health() {

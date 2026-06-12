@@ -31,9 +31,6 @@ public class NotepadService {
     @Value("${notepad.character.limit:50000}")
     private int characterLimit;
 
-    @Value("${notepad.expiry.days:10}")
-    private int expiryDays;
-
     public NotepadService(NotepadRepository repository, JwtUtils jwtUtils) {
         this.repository = repository;
         this.jwtUtils = jwtUtils;
@@ -83,7 +80,6 @@ public class NotepadService {
 
         notepad.setContent(request.getContent());
         notepad.setUpdatedAt(LocalDateTime.now());
-        notepad.setExpiresAt(LocalDateTime.now().plusDays(expiryDays));
         notepad.setLastContentSavedAt(LocalDateTime.now()); // Track content saves separately from other updates
         if (request.getBurnAfterRead() != null) {
             notepad.setBurnAfterRead(request.getBurnAfterRead());
@@ -96,8 +92,7 @@ public class NotepadService {
         return new SaveNotepadResponse(
                 true,
                 "Notepad saved successfully",
-                request.getContent() != null ? request.getContent().length() : 0,
-                notepad.getExpiresAt()
+                request.getContent() != null ? request.getContent().length() : 0
         );
     }
 
@@ -111,7 +106,6 @@ public class NotepadService {
             return new VerifyPasswordResponse(
                     true,
                     notepad.getContent(),
-                    notepad.getExpiresAt(),
                     token,
                     "Successfully verified"
             );
@@ -157,6 +151,18 @@ public class NotepadService {
         return new GenericResponse(true, "Password removed successfully");
     }
 
+    public GenericResponse deleteNotepad(String username) {
+        String normalizedUsername = normalizeUsername(username);
+        Notepad notepad = repository.findByUsernameIgnoreCase(normalizedUsername)
+                .orElseThrow(() -> new NotepadNotFoundException(normalizedUsername));
+
+        verifyJwtAccess(notepad);
+
+        repository.delete(notepad);
+        logger.info("Permanently deleted notepad: {}", normalizedUsername);
+        return new GenericResponse(true, "Notepad deleted successfully");
+    }
+
     public HealthResponse getHealth() {
         return new HealthResponse("UP", LocalDateTime.now());
     }
@@ -167,7 +173,6 @@ public class NotepadService {
         notepad.setUsername(username);
         notepad.setContent("");
         notepad.setIsProtected(false);
-        notepad.setExpiresAt(LocalDateTime.now().plusDays(expiryDays));
         return repository.save(notepad);
     }
 
@@ -179,8 +184,6 @@ public class NotepadService {
                 notepad.getPasswordHint(),
                 notepad.getContent() != null ? notepad.getContent().length() : 0,
                 characterLimit,
-                notepad.getExpiresAt(),
-                (int) ChronoUnit.DAYS.between(LocalDateTime.now(), notepad.getExpiresAt()),
                 notepad.getLastContentSavedAt(), // Use dedicated content-save timestamp, not updatedAt
                 notepad.getBurnAfterRead()
         );

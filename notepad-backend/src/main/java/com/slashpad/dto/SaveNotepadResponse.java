@@ -13,5 +13,4 @@ public class SaveNotepadResponse {
     private Boolean success;
     private String message;
     private Integer characterCount;
-    private LocalDateTime expiresAt;
 }

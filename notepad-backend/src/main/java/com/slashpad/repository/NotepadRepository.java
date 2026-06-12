@@ -15,10 +15,5 @@ public interface NotepadRepository extends JpaRepository<Notepad, String> {
 
     Optional<Notepad> findByUsernameIgnoreCase(String username);
 
-    List<Notepad> findByExpiresAtBefore(LocalDateTime dateTime);
-
-    @Query("SELECT COUNT(n) FROM Notepad n WHERE n.expiresAt < :dateTime")
-    long countByExpiresAtBefore(@Param("dateTime") LocalDateTime dateTime);
-
     long count();
 }

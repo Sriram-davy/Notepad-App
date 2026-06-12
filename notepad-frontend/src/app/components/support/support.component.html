@@ -20,17 +20,22 @@
 
     <div class="section">
       <h2>How do I password-protect my notepad?</h2>
-      <p>Click the <strong>OPTIONS</strong> button in the top toolbar, then select <strong>Password Protection</strong>. You will be taken to the security settings page where you can set a password and an optional hint. Setting a password locks your note so that only someone who knows the password can read or edit it. To ensure security, the locking process is performed directly inside your web browser before the note is stored on our servers.</p>
+      <p>Click the <strong>OPTIONS</strong> button in the top toolbar, then select <strong>Password Protection</strong>. You will be taken to the settings page where you can set a password and an optional hint. Setting a password adds a secondary layer of encryption. While <em>all</em> notes on SlashPad are encrypted directly in your browser before being stored on our servers, password protection ensures that only someone who knows your custom password can unlock and read it.</p>
     </div>
 
     <div class="section">
       <h2>What if I forget my password?</h2>
-      <p>If you forget your password, <strong>your note cannot be recovered</strong>. Because of our security design, we do not store your password in a readable form, and we have no way to unlock your private notes for you. Please make sure to write down a helpful password hint and keep your password safe.</p>
+      <p>If you forget your password, <strong>your note cannot be recovered</strong>. Because of our strict zero-knowledge security design, we never store your password or your plaintext note content on our servers, and we have no way to unlock your private notes for you. Please make sure to write down a helpful password hint and keep your password safe.</p>
     </div>
 
     <div class="section">
       <h2>How do I share my notepad?</h2>
-      <p>Click <strong>OPTIONS → Share a Read-Only Link</strong>. If your note is not password-protected, anyone with the link can view it. If it is password-protected, a special secure link is created. Anyone who uses this secure link can read the note without needing to type in the password, but they won't be able to edit it.</p>
+      <p>Click <strong>OPTIONS → Share a Read-Only Link</strong>. If your note is not password-protected, anyone with the link can view it (using the notepad name to decrypt it automatically). If it is password-protected, a special secure link is created that includes the decryption key. Anyone who uses this secure link can read the note without needing to type in the password, but they won't be able to edit it.</p>
+    </div>
+
+    <div class="section">
+      <h2>How do I permanently delete my notepad?</h2>
+      <p>Click the <strong>OPTIONS</strong> button in the top toolbar, then select <strong>Permanently Delete Note</strong>. You will be prompted with a confirmation box. Once confirmed, the notepad record and all its scrambled content are permanently and irreversibly deleted from our database. Notes on SlashPad are kept permanently and do not automatically expire, so you should use the deletion option when you want to clear your data.</p>
     </div>
 
     <div class="section">
@@ -40,7 +45,7 @@
 
     <div class="section">
       <h2>Why was I logged out automatically?</h2>
-      <p>SlashPad enforces a <strong>5-minute idle timeout</strong>. If your session is inactive for 5 minutes, you are returned to the home page. For password-protected notes, you will need to re-enter your password on the next visit. This is intentional — it ensures private sessions do not remain open unattended.</p>
+      <p>SlashPad enforces a <strong>5-minute idle timeout</strong>. If your session is inactive for 5 minutes, you are returned to the home page. For password-protected notes, you will need to re-enter your password on the next visit. This ensures private sessions do not remain open unattended.</p>
     </div>
 
     <div class="section">
