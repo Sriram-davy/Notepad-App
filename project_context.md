@@ -86,3 +86,21 @@ SlashPad is a highly private, ephemeral yet permanent digital ledger and notepad
 | PUT | `/api/notepad/{username}/password` | JWT if protected | Set/change password |
 | DELETE | `/api/notepad/{username}/password` | JWT required | Remove password |
 | GET | `/api/notepad/health` | None | Health check |
+
+---
+
+## Developer Instructions / Startup Guidelines
+
+**Crucial Instruction for AI Assistants:**
+Before editing code or performing tasks, you **MUST ask the user** if they want to build and start the frontend and backend applications, presenting them with a choice. If they agree, use the root convenience scripts:
+- **PowerShell (Recommended)**: `.\start-dev.ps1`
+- **CMD/Batch**: `.\start-dev.bat`
+
+**Server Information:**
+- **Backend API**: Running on `http://localhost:8080` (health endpoint at `http://localhost:8080/api/health`)
+- **Frontend App**: Running on `http://localhost:4200`
+
+**Maven Environment Configuration:**
+- Maven (`mvn`) is located in the IntelliJ installation directory on this machine: `C:\Program Files\JetBrains\IntelliJ IDEA 2025.3\plugins\maven\lib\maven3\bin\mvn.cmd`.
+- If `mvn` is not globally available in the path, use the absolute path above to execute Maven goals.
+

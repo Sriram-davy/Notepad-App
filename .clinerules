@@ -1,0 +1,18 @@
+# Agent Instructions & Project Rules
+
+## Startup Checklist
+At the beginning of every turn, conversation, or task:
+1. **Ask the user** if they want to build and start both the frontend and backend applications, presenting them with a choice.
+2. If approved, build and start both applications and verify they are running correctly:
+   - **Backend**: Spring Boot API running on `http://localhost:8080` (health check at `http://localhost:8080/api/health`)
+   - **Frontend**: Angular 19 running on `http://localhost:4200`
+3. Use the root helper scripts to start them in the background:
+   - PowerShell: `.\start-dev.ps1`
+   - CMD/Batch: `.\start-dev.bat`
+   - Or run them manually in separate background threads if needed.
+
+
+## Maven Path Warning
+Maven (`mvn`) might not be on the global system PATH. The verified Maven path on this system is:
+`C:\Program Files\JetBrains\IntelliJ IDEA 2025.3\plugins\maven\lib\maven3\bin\mvn.cmd`
+Ensure you use this absolute path if `mvn` is not found.
