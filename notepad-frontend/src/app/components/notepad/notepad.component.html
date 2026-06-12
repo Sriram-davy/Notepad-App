@@ -133,13 +133,13 @@
 
     <!-- Right sidebar -->
     <aside class="editor-sidebar">
-      <button class="sidebar-btn" (click)="copyNotepadUrl()" title="Copy notepad link">
+      <button class="sidebar-btn" (click)="copyNotepadUrl()" data-tooltip="Copy Notepad Link">
         <span class="material-symbols-outlined">content_copy</span>
       </button>
-      <button class="sidebar-btn" (click)="shareNotepad()" *ngIf="!isReadOnly" title="Share a read-only link">
+      <button class="sidebar-btn" (click)="shareNotepad()" *ngIf="!isReadOnly" data-tooltip="Share Read-Only Link">
         <span class="material-symbols-outlined">share</span>
       </button>
-      <button class="sidebar-btn" (click)="exportAsTxt()" title="Download as .txt">
+      <button class="sidebar-btn" (click)="exportAsTxt()" data-tooltip="Download as .txt">
         <span class="material-symbols-outlined">download</span>
       </button>
     </aside>
