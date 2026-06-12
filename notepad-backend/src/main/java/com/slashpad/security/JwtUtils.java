@@ -27,8 +27,23 @@ public class JwtUtils {
      * This key is consistent across restarts, so tokens remain valid after redeployment.
      */
     private Key getSigningKey() {
-        byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
-        return Keys.hmacShaKeyFor(keyBytes);
+        try {
+            byte[] keyBytes = Base64.getDecoder().decode(jwtSecret);
+            return Keys.hmacShaKeyFor(keyBytes);
+        } catch (IllegalArgumentException e) {
+            // Fallback to UTF-8 bytes if the secret is not base64 encoded
+            byte[] keyBytes = jwtSecret.getBytes(java.nio.charset.StandardCharsets.UTF_8);
+            // Keys.hmacShaKeyFor requires at least 256 bits (32 bytes)
+            if (keyBytes.length < 32) {
+                try {
+                    java.security.MessageDigest digest = java.security.MessageDigest.getInstance("SHA-256");
+                    keyBytes = digest.digest(keyBytes);
+                } catch (java.security.NoSuchAlgorithmException ex) {
+                    throw new RuntimeException("Failed to initialize security key", ex);
+                }
+            }
+            return Keys.hmacShaKeyFor(keyBytes);
+        }
     }
 
     public String generateToken(String path) {
