@@ -61,7 +61,7 @@
 /* ── IDLE WARNING ── */
 .idle-warning {
   flex-shrink: 0;
-  background: rgba(201, 168, 76, 0.08);
+  background: rgba(var(--accent-rgb), 0.08);
   border-bottom: 1px solid var(--gold-dim);
   color: var(--gold);
   font-family: 'JetBrains Mono', monospace;
@@ -132,7 +132,7 @@
   
   &:hover {
     opacity: 0.9;
-    text-shadow: 0 0 12px rgba(201, 168, 76, 0.4);
+    text-shadow: 0 0 12px rgba(var(--accent-rgb), 0.4);
   }
 }
 
@@ -160,17 +160,17 @@
   font-weight: 500;
   color: var(--gold);
   cursor: pointer;
-  background: rgba(201, 168, 76, 0.04);
-  border: 1px solid rgba(201, 168, 76, 0.15);
+  background: rgba(var(--accent-rgb), 0.04);
+  border: 1px solid rgba(var(--accent-rgb), 0.15);
   padding: 0.25rem 0.6rem;
   border-radius: 3px;
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   user-select: none;
 
   &:hover, &.active {
-    background: rgba(201, 168, 76, 0.1);
+    background: rgba(var(--accent-rgb), 0.1);
     border-color: var(--gold);
-    box-shadow: 0 0 12px rgba(201, 168, 76, 0.2);
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.2);
   }
 }
 
@@ -247,7 +247,7 @@
   transition: all 0.2s ease;
 
   &:hover:not(:disabled) {
-    background: rgba(201, 168, 76, 0.08);
+    background: rgba(var(--accent-rgb), 0.08);
     color: var(--gold);
     padding-left: 0.75rem;
   }
@@ -345,13 +345,13 @@
   
   &.protected {
     color: var(--gold);
-    border-color: rgba(201, 168, 76, 0.3);
-    background: rgba(201, 168, 76, 0.08);
-    box-shadow: 0 0 12px rgba(201, 168, 76, 0.1);
+    border-color: rgba(var(--accent-rgb), 0.3);
+    background: rgba(var(--accent-rgb), 0.08);
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.1);
     
     &:hover {
       border-color: var(--gold);
-      background: rgba(201, 168, 76, 0.12);
+      background: rgba(var(--accent-rgb), 0.12);
     }
   }
   .material-symbols-outlined { font-size: 0.9rem; }
@@ -373,7 +373,7 @@
   
   &.is-saving {
     color: var(--gold);
-    text-shadow: 0 0 8px rgba(201, 168, 76, 0.3);
+    text-shadow: 0 0 8px rgba(var(--accent-rgb), 0.3);
   }
 }
 .status-icon { 
@@ -425,7 +425,7 @@
   letter-spacing: 0.04em;
   border-radius: 3px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.15);
   transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow: hidden;
@@ -434,12 +434,12 @@
     background: var(--gold-dim);
     border-color: var(--gold-dim);
     transform: translateY(-2px);
-    box-shadow: 0 6px 16px rgba(201, 168, 76, 0.35);
+    box-shadow: 0 6px 16px rgba(var(--accent-rgb), 0.35);
   }
   
   &:active:not(:disabled) {
     transform: translateY(0);
-    box-shadow: 0 2px 8px rgba(201, 168, 76, 0.15);
+    box-shadow: 0 2px 8px rgba(var(--accent-rgb), 0.15);
   }
   
   &:disabled {
@@ -469,16 +469,16 @@
   &:hover {
     border-color: var(--gold-dim);
     color: var(--gold);
-    background: rgba(201, 168, 76, 0.05);
+    background: rgba(var(--accent-rgb), 0.05);
     transform: translateY(-1.5px);
-    box-shadow: 0 4px 12px rgba(201, 168, 76, 0.1);
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.1);
   }
 
   &.active {
     border-color: var(--gold);
     color: var(--gold);
     background: var(--gold-muted);
-    box-shadow: 0 0 12px rgba(201, 168, 76, 0.15);
+    box-shadow: 0 0 12px rgba(var(--accent-rgb), 0.15);
   }
 
   &:active {
@@ -582,7 +582,11 @@
     border-color: var(--gold);
     border-left-color: var(--gold);
     box-shadow: 0 16px 64px rgba(0, 0, 0, 0.55), 
+<<<<<<< Updated upstream
                 0 0 24px rgba(201, 168, 76, 0.08);
+=======
+                0 12px 36px -4px rgba(var(--accent-rgb), 0.18);
+>>>>>>> Stashed changes
   }
 }
 
@@ -593,7 +597,7 @@
   overflow-y: hidden; /* Scrolled dynamically via typescript */
   text-align: right;
   padding-right: 1.25rem;
-  border-right: 1px solid rgba(201, 168, 76, 0.06);
+  border-right: 1px solid rgba(var(--accent-rgb), 0.06);
   user-select: none;
   color: var(--ink-faint);
   font-size: 0.95rem;
@@ -630,7 +634,7 @@
   }
 
   &::selection {
-    background: rgba(201, 168, 76, 0.25);
+    background: rgba(var(--accent-rgb), 0.25);
     color: var(--ink);
   }
 
@@ -641,11 +645,11 @@
     background: transparent;
   }
   &::-webkit-scrollbar-thumb {
-    background: rgba(201, 168, 76, 0.12);
+    background: rgba(var(--accent-rgb), 0.12);
     border-radius: 3px;
     
     &:hover {
-      background: rgba(201, 168, 76, 0.28);
+      background: rgba(var(--accent-rgb), 0.28);
     }
   }
   

@@ -34,6 +34,7 @@ export class NotepadService {
     const iv = this.crypto.base64ToBuffer(parts[2]);
     const ciphertext = this.crypto.base64ToBuffer(parts[3]);
 
+<<<<<<< Updated upstream
     const pwd = this.passwords.get(username.toLowerCase());
     if (!pwd) {
       // Try to decrypt using a pre-loaded share key (no password needed)
@@ -55,6 +56,40 @@ export class NotepadService {
     } catch (e) {
       console.error('Decryption failed', e);
       return 'ERROR: Could not decrypt note. Password may be wrong or data corrupted.';
+=======
+    // 1. Check existing cached key in cryptoKeys map first (e.g. read-only share key loaded from #share= fragment)
+    const existingCrypto = this.cryptoKeys.get(username.toLowerCase());
+    if (existingCrypto) {
+      try {
+        return await this.crypto.decrypt(ciphertext.buffer as ArrayBuffer, iv, existingCrypto.key);
+      } catch (e) {
+        console.warn('Decryption with existing cached/share key failed, falling back', e);
+      }
+    }
+
+    // 2. Check custom password next (from password setup / prompt)
+    const pwd = this.passwords.get(username.toLowerCase());
+    if (pwd) {
+      try {
+        const key = await this.crypto.deriveKey(pwd, salt);
+        const decrypted = await this.crypto.decrypt(ciphertext.buffer as ArrayBuffer, iv, key);
+        this.cryptoKeys.set(username.toLowerCase(), { key, salt });
+        return decrypted;
+      } catch (e) {
+        console.error('Decryption with custom password failed', e);
+        return 'ERROR: Could not decrypt note. Password may be wrong or data corrupted.';
+      }
+    }
+
+    // 3. Default: try decrypting using the notepad username itself (for unprotected notes)
+    try {
+      const key = await this.crypto.deriveKey(username.toLowerCase(), salt);
+      const decrypted = await this.crypto.decrypt(ciphertext.buffer as ArrayBuffer, iv, key);
+      this.cryptoKeys.set(username.toLowerCase(), { key, salt });
+      return decrypted;
+    } catch (e) {
+      return content; // Return raw ciphertext (triggers password prompt in UI)
+>>>>>>> Stashed changes
     }
   }
 
