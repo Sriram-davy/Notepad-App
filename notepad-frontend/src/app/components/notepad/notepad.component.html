@@ -179,8 +179,7 @@
         <div class="option-text">
           <span class="option-name">Share a Read-Only Link</span>
           <span class="option-desc">
-            {{ notepad?.isProtected ? 'Copies a secure encrypted link. The recipient can read but cannot edit or see
-            your password.' : 'Copies a link anyone can open to view this note.' }}
+            {{ notepad?.isProtected ? 'Copies a secure read-only link. Recipients can view your note but cannot edit it.' : 'Set up a password first to create and share a read-only link.' }}
           </span>
         </div>
         <span class="material-symbols-outlined option-arrow">chevron_right</span>
@@ -272,5 +271,40 @@
       </div>
     </div>
 
+    <!-- Delete confirmation modal -->
+    <div class="overlay" *ngIf="showDeleteConfirm">
+      <div class="password-modal rename-modal" style="border-left: 3px solid #ff4d4d;">
+        <h2 class="modal-title font-headline" style="color: #ff4d4d;">Delete Notepad?</h2>
+        <p class="modal-hint font-mono" style="margin-bottom: 0.5rem; color: var(--ink);">
+          Are you sure you want to permanently delete <strong>/{{ notepad?.username }}</strong>? This action cannot be undone.
+        </p>
+        <div class="rename-modal-buttons">
+          <button class="elegant-btn" style="background: #ff4d4d; border-color: #ff4d4d; color: white;" (click)="confirmDeleteNotepad()">
+            Permanently Delete
+          </button>
+          <button class="elegant-btn secondary-btn" (click)="cancelDeleteNotepad()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Password required for read-only share modal -->
+    <div class="overlay" *ngIf="showSharePasswordPrompt">
+      <div class="password-modal rename-modal" style="border-left: 3px solid var(--gold);">
+        <h2 class="modal-title font-headline" style="color: var(--gold);">Set Up a Password First</h2>
+        <p class="modal-hint font-mono" style="margin-bottom: 1.2rem; color: var(--ink); line-height: 1.6;">
+          To create and share a read-only link, you must set up a password for this note first. Adding a password protects your notepad so others can view your text without making any changes.
+        </p>
+        <div class="rename-modal-buttons">
+          <button class="elegant-btn" (click)="goToPasswordSetupForShare()">
+            Set Up Password
+          </button>
+          <button class="elegant-btn secondary-btn" (click)="cancelSharePasswordPrompt()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
   </ng-container>
 </div>
