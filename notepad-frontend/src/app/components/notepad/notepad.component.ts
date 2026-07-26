@@ -39,6 +39,7 @@ export class NotepadComponent implements OnInit, OnDestroy {
   characterLimit = 50000;
   lineNumbers: number[] = [];
   showDeleteConfirm = false;
+  showSharePasswordPrompt = false;
   private contentChange$ = new Subject<string>();
   private autoSaveSubscription?: Subscription;
   private timeAgoSubscription?: Subscription;
@@ -273,16 +274,30 @@ export class NotepadComponent implements OnInit, OnDestroy {
   // ── SHARE ──────────────────────────────────────────────────────────────────
   async shareNotepad() {
     if (!this.notepad) return;
+
+    if (!this.notepad.isProtected) {
+      this.showOptionsPanel = false;
+      this.showSharePasswordPrompt = true;
+      return;
+    }
+
     try {
       const shareLink = await this.notepadService.generateShareLink(this.notepad.username);
       await navigator.clipboard.writeText(shareLink);
-      this.shareToastMsg = this.notepad.isProtected
-        ? '🔐 Encrypted share link copied! The recipient can read but not edit.'
-        : '🔗 Link copied! Anyone with this link can view and edit this note.';
+      this.shareToastMsg = '🔐 Encrypted read-only link copied! The recipient can read but not edit.';
     } catch (e) {
       this.shareToastMsg = 'Could not copy to clipboard. Please copy the URL manually.';
     }
     setTimeout(() => this.shareToastMsg = '', 4000);
+  }
+
+  goToPasswordSetupForShare() {
+    this.showSharePasswordPrompt = false;
+    this.togglePasswordSetup();
+  }
+
+  cancelSharePasswordPrompt() {
+    this.showSharePasswordPrompt = false;
   }
 
   // ── EXPORT ─────────────────────────────────────────────────────────────────
