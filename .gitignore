@@ -19,3 +19,7 @@ target/
 
 # Env
 .env
+secrets.properties
+
+# Workspace Artifacts
+Artifacts/

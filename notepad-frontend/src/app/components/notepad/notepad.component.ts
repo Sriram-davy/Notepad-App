@@ -39,11 +39,8 @@ export class NotepadComponent implements OnInit, OnDestroy {
   characterLimit = 50000;
   daysUntilExpiry = 10;
   lineNumbers: number[] = [];
-<<<<<<< Updated upstream
-=======
   showDeleteConfirm = false;
   showSharePasswordPrompt = false;
->>>>>>> Stashed changes
   private contentChange$ = new Subject<string>();
   private autoSaveSubscription?: Subscription;
   private timeAgoSubscription?: Subscription;
@@ -474,6 +471,31 @@ export class NotepadComponent implements OnInit, OnDestroy {
     } else {
       this.router.navigate(['/', targetPath]);
     }
+  }
+
+  requestDeleteNotepad() {
+    this.showOptionsPanel = false;
+    this.showDeleteConfirm = true;
+  }
+
+  cancelDeleteNotepad() {
+    this.showDeleteConfirm = false;
+  }
+
+  confirmDeleteNotepad() {
+    this.showDeleteConfirm = false;
+    this.isLoading = true;
+    this.notepadService.deleteNotepad(this.activeUsername).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.router.navigate(['/']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Failed to delete notepad:', err);
+        alert('Could not permanently delete this notepad. Please try again.');
+      }
+    });
   }
 
   navigateToPad(username: string) {
